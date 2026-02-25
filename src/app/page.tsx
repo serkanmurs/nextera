@@ -402,6 +402,33 @@ function ClientHome({ user, sessions, users }: { user: UserType; sessions: Sessi
 
 // ==================== SESSIONS PAGE ====================
 function SessionsPage({ user, sessions, users, onBook, isAdmin }: { user: UserType; sessions: SessionType[]; users: UserType[]; onBook: (d: string, t: string) => void; isAdmin: boolean }) {
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([]);
+  const [calendarConnected, setCalendarConnected] = useState(false);
+  const [loadingCal, setLoadingCal] = useState(false);
+
+  useEffect(() => {
+    const checkCalendar = async () => {
+      try {
+        setLoadingCal(true);
+        const res = await fetch("/api/calendar");
+        const data = await res.json();
+        if (data.success && data.events) {
+          setCalendarConnected(true);
+          setCalendarEvents(data.events);
+        }
+      } catch (e) {
+        console.log("Calendar not connected");
+      } finally {
+        setLoadingCal(false);
+      }
+    };
+    checkCalendar();
+    // Check URL for google=connected param
+    if (typeof window !== "undefined" && window.location.search.includes("google=connected")) {
+      setCalendarConnected(true);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
   const [selectedDate, setSelectedDate] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split("T")[0]; });
   const [selectedTime, setSelectedTime] = useState("");
   const [showBooking, setShowBooking] = useState(false);
