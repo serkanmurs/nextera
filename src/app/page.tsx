@@ -503,6 +503,7 @@ function SessionsPage({ user, sessions, users, onBook, isAdmin }: { user: UserTy
         <Icons.Calendar />
         <h4 style={{ margin: "8px 0 4px", fontSize: 15, fontWeight: 700 }}>Google Takvim Entegrasyonu</h4>
         <p style={{ fontSize: 13, color: COLORS.textLight, margin: 0 }}>Seanslarınız otomatik olarak Google Takvim&apos;e eklenir.</p>
+        <button onClick={() => window.location.href = "/api/auth/google"} style={{ background: "#fff", color: "#0891B2", border: "2px solid #0891B2", borderRadius: 12, padding: "8px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", marginTop: 12 }}>🔗 Google Takvim Bağla</button>
       </div>
     </div>
   );
@@ -836,7 +837,22 @@ export default function NextERAApp() {
       const notif = { user_id: currentUser.id, text: `${formatDate(date)} ${time} tarihine yeni seans eklendi.`, type: "reminder", is_read: false };
       const { data: nData } = await supabase.from("notifications").insert(notif).select().single();
       if (nData) setNotifications(prev => [nData, ...prev]);
-      showToast("Seans randevusu oluşturuldu! 📧", "success");
+      // Google Takvim entegrasyonu
+      try {
+        const client = users.find(u => u.id === currentUser.id);
+        await fetch("/api/calendar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date, time, duration: 50,
+            clientName: client?.name || "Danışan",
+            clientEmail: client?.email || "",
+          }),
+        });
+        showToast("Seans oluşturuldu ve takvime eklendi! 📅", "success");
+      } catch (e) {
+        showToast("Seans oluşturuldu! (Takvim bağlantısı kontrol edin)", "success");
+      }
     }
     if (error) showToast("Hata: " + error.message, "error");
   };
