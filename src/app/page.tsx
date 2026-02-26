@@ -173,7 +173,7 @@ function LoginScreen({ onLogin, onGoRegister }: { onLogin: (email: string, passw
           <span onClick={async () => {
             const resetEmail = prompt("Şifre sıfırlama linki gönderilecek e-posta adresinizi girin:");
             if (resetEmail) {
-              const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail, { redirectTo: window.location.origin });
+              const { error: resetError } = await supabase.auth.resetPasswordForEmail(resetEmail, { redirectTo: window.location.origin + '/reset-password' });
               if (resetError) alert("Hata: " + resetError.message);
               else alert("Şifre sıfırlama linki e-posta adresinize gönderildi!");
             }
