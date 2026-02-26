@@ -526,6 +526,7 @@ function SessionsPage({ user, sessions, users, onBook, isAdmin }: { user: UserTy
         })}
       </div>
 
+      {isAdmin && (
       <div style={cardStyle}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>📆 Google Takvim</h3>
@@ -568,7 +569,8 @@ function SessionsPage({ user, sessions, users, onBook, isAdmin }: { user: UserTy
             <button onClick={() => window.location.href = "/api/auth/google"} style={{ background: "linear-gradient(135deg, #0891B2, #0EA5E9)", color: "#fff", border: "none", borderRadius: 12, padding: "10px 20px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>🔗 Google Takvim Bağla</button>
           </div>
         )}
-      </div>}
+      </div>
+      )}
     </div>
   );
 }
