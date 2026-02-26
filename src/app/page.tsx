@@ -148,7 +148,7 @@ function LoginScreen({ onLogin, onGoRegister }: { onLogin: (email: string, passw
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0891B2 0%, #0EA5E9 40%, #F8FAFC 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ marginBottom: 40, textAlign: "center" }}>
-        <img src="/logo.png" alt="NextERA" style={{ width: 80, height: 80, borderRadius: 20, marginBottom: 12 }} />
+        <img src="/logo.png" alt="NextERA" style={{ width: 100, height: 100, borderRadius: 24, marginBottom: 16, objectFit: "contain" }} />
         <div style={{ fontSize: 42, fontWeight: 900, color: "#fff", letterSpacing: "-1px" }}>Next<span style={{ color: "#FCD34D" }}>ERA</span></div>
         <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, marginTop: 6, fontWeight: 500 }}>Danışmanlık Platformu</div>
       </div>
