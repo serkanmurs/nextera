@@ -148,6 +148,7 @@ function LoginScreen({ onLogin, onGoRegister }: { onLogin: (email: string, passw
   return (
     <div style={{ minHeight: "100vh", background: "linear-gradient(180deg, #0891B2 0%, #0EA5E9 40%, #F8FAFC 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 24 }}>
       <div style={{ marginBottom: 40, textAlign: "center" }}>
+        <img src="/logo.png" alt="NextERA" style={{ width: 80, height: 80, borderRadius: 20, marginBottom: 12 }} />
         <div style={{ fontSize: 42, fontWeight: 900, color: "#fff", letterSpacing: "-1px" }}>Next<span style={{ color: "#FCD34D" }}>ERA</span></div>
         <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 15, marginTop: 6, fontWeight: 500 }}>Danışmanlık Platformu</div>
       </div>
@@ -1078,7 +1079,7 @@ export default function NextERAApp() {
       {/* Header */}
       <div style={{ background: "linear-gradient(135deg, #0891B2, #0EA5E9)", padding: "16px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 50 }}>
         <div>
-          <div style={{ color: "#fff", fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px" }}>Next<span style={{ color: "#FCD34D" }}>ERA</span></div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}><img src="/logo.png" alt="NextERA" style={{ width: 32, height: 32, borderRadius: 8 }} /><span style={{ color: "#fff", fontSize: 22, fontWeight: 800, letterSpacing: "-0.5px" }}>Next<span style={{ color: "#FCD34D" }}>ERA</span></span></div>
           <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, fontWeight: 500 }}>{isAdmin ? "Admin Paneli" : "Danışmanlık Platformu"}</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
