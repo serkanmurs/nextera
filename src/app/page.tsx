@@ -978,7 +978,7 @@ export default function NextERAApp() {
     if (!currentUser) return;
     const newSession = {
       client_id: currentUser.id,
-      date, time, duration: 50,
+      date, time, duration: 60,
       status: "upcoming",
       rating: null, review: null,
     };
@@ -996,7 +996,7 @@ export default function NextERAApp() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            date, time, duration: 50,
+            date, time, duration: 60,
             clientName: client?.name || "Danışan",
             clientEmail: client?.email || "",
           }),

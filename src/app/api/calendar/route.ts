@@ -55,9 +55,9 @@ export async function POST(request: Request) {
     const auth = await getAuthClient();
     const calendar = google.calendar({ version: "v3", auth });
 
-    const startDateTime = `${date}T${time}:00`;
-    const endDate = new Date(`${date}T${time}:00`);
-    endDate.setMinutes(endDate.getMinutes() + (duration || 50));
+    const startDateTime = `${date}T${time}:00+03:00`;
+    const endDate = new Date(`${date}T${time}:00+03:00`);
+    endDate.setMinutes(endDate.getMinutes() + (duration || 60));
     const endDateTime = endDate.toISOString();
 
     const event = {
