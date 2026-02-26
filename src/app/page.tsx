@@ -418,8 +418,20 @@ function ClientHome({ user, sessions, users, onRate }: { user: UserType; session
       {admin && (
         <div style={{ ...cardStyle, background: "linear-gradient(135deg, #0891B2 0%, #0EA5E9 100%)", color: "#fff", border: "none" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(255,255,255,0.2)", border: "3px solid rgba(255,255,255,0.4)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 20 }}>{getInitials(admin.name)}</div>
-            <div><div style={{ fontWeight: 800, fontSize: 17 }}>{admin.name}</div><div style={{ fontSize: 13, opacity: 0.85 }}>{admin.bio}</div><div style={{ fontSize: 12, opacity: 0.7, marginTop: 2 }}>{admin.city}</div></div>
+            {admin.avatar?.startsWith("http") ? (
+              <img src={admin.avatar} alt={admin.name} style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover", border: "3px solid rgba(255,255,255,0.4)", flexShrink: 0 }} />
+            ) : (
+              <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(255,255,255,0.2)", border: "3px solid rgba(255,255,255,0.4)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 20, flexShrink: 0 }}>{getInitials(admin.name)}</div>
+            )}
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 800, fontSize: 17 }}>{admin.name}</div>
+              <div style={{ fontSize: 13, opacity: 0.85 }}>{admin.bio}</div>
+              <div style={{ fontSize: 12, opacity: 0.7, marginTop: 2 }}>{admin.city}</div>
+              <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+                <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", textDecoration: "none", fontSize: 16 }}>💼</a>
+                <a href="mailto:serkanmursalli@gmail.com" style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", textDecoration: "none", fontSize: 16 }}>✉️</a>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -700,8 +712,29 @@ function MessagesPage({ user, messages, users, onSend, isAdmin }: { user: UserTy
 
   const handleFileAttach = () => {
     if (!activeChat) return;
-    const types = ["📄 Rapor.pdf", "📸 Fotoğraf.jpg", "📋 Döküman.docx"];
-    onSend(activeChat, types[Math.floor(Math.random() * types.length)], "file");
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/png,image/jpeg,image/jpg,application/pdf";
+    input.onchange = async (e: any) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Dosya boyutu en fazla 10MB olabilir.");
+        return;
+      }
+      try {
+        const fileName = `${Date.now()}_${file.name}`;
+        const { data, error } = await supabase.storage.from("uploads").upload(`messages/${fileName}`, file);
+        if (error) throw error;
+        const { data: urlData } = supabase.storage.from("uploads").getPublicUrl(`messages/${fileName}`);
+        const fileUrl = urlData.publicUrl;
+        const isImage = file.type.startsWith("image/");
+        onSend(activeChat, fileUrl, isImage ? "image" : "file");
+      } catch (err: any) {
+        alert("Dosya yüklenemedi: " + err.message);
+      }
+    };
+    input.click();
   };
 
   useEffect(() => {
@@ -752,7 +785,11 @@ function MessagesPage({ user, messages, users, onSend, isAdmin }: { user: UserTy
           return (
             <div key={m.id} style={{ display: "flex", justifyContent: isMine ? "flex-end" : "flex-start", marginBottom: 8 }}>
               <div style={{ maxWidth: "75%", padding: "10px 14px", borderRadius: isMine ? "16px 16px 4px 16px" : "16px 16px 16px 4px", background: isMine ? "linear-gradient(135deg, #0891B2, #0EA5E9)" : "#fff", color: isMine ? "#fff" : COLORS.text, fontSize: 14, boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
-                {m.msg_type === "file" ? <div style={{ display: "flex", alignItems: "center", gap: 6 }}><Icons.Attach /><span style={{ fontWeight: 600 }}>{m.text}</span></div> : m.text}
+                {m.msg_type === "image" ? (
+                  <a href={m.text} target="_blank" rel="noopener noreferrer"><img src={m.text} alt="Fotoğraf" style={{ maxWidth: "100%", maxHeight: 200, borderRadius: 8, display: "block" }} /></a>
+                ) : m.msg_type === "file" ? (
+                  <a href={m.text} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", gap: 6, color: isMine ? "#fff" : "#0891B2", textDecoration: "none" }}><Icons.Attach /><span style={{ fontWeight: 600 }}>📄 Dosya Görüntüle</span></a>
+                ) : m.text}
                 <div style={{ fontSize: 10, opacity: 0.7, marginTop: 4, textAlign: "right" }}>{m.created_at.split("T")[1]?.slice(0, 5)}</div>
               </div>
             </div>
@@ -784,7 +821,36 @@ function ProfilePage({ user, sessions, onLogout, onUpdate }: { user: UserType; s
   return (
     <div style={{ padding: 16 }}>
       <div style={{ ...cardStyle, textAlign: "center", padding: 28, background: "linear-gradient(135deg, #F0FDFA 0%, #EFF6FF 100%)" }}>
-        <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg, #0891B2, #F97316)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 28, margin: "0 auto 14px" }}>{getInitials(user.name)}</div>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          {user.avatar && user.avatar.startsWith("http") ? (
+            <img src={user.avatar} alt={user.name} style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", margin: "0 auto 14px", display: "block" }} />
+          ) : (
+            <div style={{ width: 80, height: 80, borderRadius: "50%", background: "linear-gradient(135deg, #0891B2, #F97316)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 28, margin: "0 auto 14px" }}>{getInitials(user.name)}</div>
+          )}
+          {editing && (
+            <button onClick={async () => {
+              const input = document.createElement("input");
+              input.type = "file";
+              input.accept = "image/png,image/jpeg,image/jpg";
+              input.onchange = async (e: any) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+                if (file.size > 5 * 1024 * 1024) { alert("Fotoğraf en fazla 5MB olabilir."); return; }
+                try {
+                  const fileName = `avatar_${user.id}_${Date.now()}`;
+                  const { error: upErr } = await supabase.storage.from("uploads").upload(`avatars/${fileName}`, file, { upsert: true });
+                  if (upErr) throw upErr;
+                  const { data: urlData } = supabase.storage.from("uploads").getPublicUrl(`avatars/${fileName}`);
+                  const avatarUrl = urlData.publicUrl;
+                  setForm((p: any) => ({ ...p, avatar: avatarUrl }));
+                } catch (err: any) {
+                  alert("Fotoğraf yüklenemedi: " + err.message);
+                }
+              };
+              input.click();
+            }} style={{ position: "absolute", bottom: 14, right: -4, width: 28, height: 28, borderRadius: "50%", background: "#0891B2", color: "#fff", border: "2px solid #fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 14, padding: 0 }}>📷</button>
+          )}
+        </div>
         <h2 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 800 }}>{user.name}</h2>
         <p style={{ margin: 0, fontSize: 14, color: COLORS.textLight }}>{user.email}</p>
         {user.role === "admin" && <span style={{ background: COLORS.secondary, color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: 11, fontWeight: 700, display: "inline-block", marginTop: 8 }}>Admin</span>}
@@ -870,7 +936,17 @@ function NotificationsPanel({ notifications, onClose, onMarkRead }: { notificati
 export default function NextERAApp() {
   const [currentUser, setCurrentUser] = useState<UserType | null>(null);
   const [screen, setScreen] = useState<"login" | "register" | "app">("login");
-  const [page, setPage] = useState("home");
+  const [page, setPageState] = useState(() => {
+    if (typeof window !== "undefined") {
+      const hash = window.location.hash.replace("#", "");
+      return ["home", "sessions", "messages", "profile"].includes(hash) ? hash : "home";
+    }
+    return "home";
+  });
+  const setPage = (p: string) => {
+    setPageState(p);
+    if (typeof window !== "undefined") window.location.hash = p;
+  };
   const [users, setUsers] = useState<UserType[]>([]);
   const [sessions, setSessions] = useState<SessionType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -1088,7 +1164,7 @@ export default function NextERAApp() {
   const handleUpdateProfile = async (updatedUser: UserType) => {
     const { error } = await supabase.from("users").update({
       name: updatedUser.name, phone: updatedUser.phone, gender: updatedUser.gender,
-      city: updatedUser.city, bio: updatedUser.bio,
+      city: updatedUser.city, bio: updatedUser.bio, avatar: updatedUser.avatar,
     }).eq("id", updatedUser.id);
     if (!error) {
       setCurrentUser(updatedUser);
@@ -1153,7 +1229,11 @@ export default function NextERAApp() {
             <Icons.Bell />
             {unreadNotifs > 0 && <span style={{ position: "absolute", top: -4, right: -4, width: 18, height: 18, borderRadius: "50%", background: COLORS.secondary, color: "#fff", fontSize: 10, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{unreadNotifs}</span>}
           </div>
-          <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, #0891B2, #F97316)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 12, border: "2px solid rgba(255,255,255,0.4)" }}>{currentUser ? getInitials(currentUser.name) : "?"}</div>
+          {currentUser?.avatar?.startsWith("http") ? (
+              <img src={currentUser.avatar} alt="" style={{ width: 34, height: 34, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.4)" }} />
+            ) : (
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, #0891B2, #F97316)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 12, border: "2px solid rgba(255,255,255,0.4)" }}>{currentUser ? getInitials(currentUser.name) : "?"}</div>
+            )}
         </div>
       </div>
 
