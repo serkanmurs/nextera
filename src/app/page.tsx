@@ -163,7 +163,7 @@ function LoginScreen({ onLogin, onGoRegister }: { onLogin: (email: string, passw
           <label style={{ fontSize: 13, fontWeight: 600, color: COLORS.textLight, marginBottom: 6, display: "block" }}>Şifre</label>
           <input style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: `1.5px solid ${COLORS.border}`, fontSize: 15, outline: "none", boxSizing: "border-box" }} type="password" value={password} onChange={e => { setPassword(e.target.value); setError(""); }} placeholder="••••••••" onKeyDown={e => e.key === "Enter" && handleLogin()} />
         </div>
-        <button onClick={handleLogin} disabled={loading} style={{ background: "linear-gradient(135deg, #0891B2, #0EA5E9)", color: "#fff", border: "none", borderRadius: 12, padding: "12px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", width: "100%", boxShadow: "0 4px 14px rgba(8,145,178,0.3)", opacity: loading ? 0.7 : 1 }}>
+        <button onClick={handleLogin} disabled={loading} style={{ background: "linear-gradient(135deg, #0891B2, #0EA5E9)", color: "#fff", border: "none", borderRadius: 14, padding: "13px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", width: "100%", boxShadow: "0 4px 14px rgba(8,145,178,0.3)", opacity: loading ? 0.7 : 1, transition: "all 0.2s", letterSpacing: "0.3px" }}>
           {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
         </button>
         <div style={{ textAlign: "center", marginTop: 16 }}>
@@ -347,7 +347,7 @@ function AdminDashboard({ users, sessions }: { users: UserType[]; sessions: Sess
             <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
               <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #0891B2, #F97316)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 800, fontSize: 13 }}>{client ? getInitials(client.name) : "?"}</div>
               <div style={{ flex: 1 }}><div style={{ fontWeight: 700, fontSize: 14 }}>{client?.name || "Danışan"}</div><div style={{ fontSize: 12, color: COLORS.textLight }}>{formatDate(s.date)} · {s.time}</div></div>
-              <span style={{ background: `${COLORS.accent}15`, color: COLORS.accent, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>Yaklaşan</span>
+              <span style={{ background: `${COLORS.accent}15`, color: COLORS.accent, borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.2px" }}>Yaklaşan</span>
             </div>
           );
         })}
@@ -442,7 +442,7 @@ function ClientHome({ user, sessions, users, onRate }: { user: UserType; session
           <div key={s.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: `1px solid ${COLORS.border}` }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: `${COLORS.accent}12`, display: "flex", alignItems: "center", justifyContent: "center", color: COLORS.accent, fontSize: 18, fontWeight: 800 }}>{new Date(s.date).getDate()}</div>
             <div style={{ flex: 1 }}><div style={{ fontWeight: 700, fontSize: 14 }}>Online Seans</div><div style={{ fontSize: 12, color: COLORS.textLight }}>{formatDate(s.date)} · {s.time} · {s.duration} dk</div></div>
-            <span style={{ background: `${COLORS.accent}15`, color: COLORS.accent, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>Yaklaşan</span>
+            <span style={{ background: `${COLORS.accent}15`, color: COLORS.accent, borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.2px" }}>Yaklaşan</span>
           </div>
         ))}
       </div>
@@ -453,7 +453,7 @@ function ClientHome({ user, sessions, users, onRate }: { user: UserType; session
           <div key={s.id} style={{ padding: "12px 0", borderBottom: `1px solid ${COLORS.border}` }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div><div style={{ fontWeight: 700, fontSize: 14 }}>Online Seans</div><div style={{ fontSize: 12, color: COLORS.textLight }}>{formatDate(s.date)} · {s.time}</div></div>
-              <span style={{ background: `${COLORS.success}15`, color: COLORS.success, borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>Tamamlandı</span>
+              <span style={{ background: `${COLORS.success}15`, color: COLORS.success, borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.2px" }}>Tamamlandı</span>
             </div>
             {s.rating ? (
               <div style={{ marginTop: 8 }}>
@@ -542,7 +542,7 @@ function SessionsPage({ user, sessions, users, onBook, onCancel, onDelete, isAdm
 
   return (
     <div style={{ padding: 16 }}>
-      <h2 style={{ margin: "0 0 16px", fontSize: 20, fontWeight: 800 }}>📅 Seanslar</h2>
+      <h2 style={{ margin: "0 0 16px", fontSize: 22, fontWeight: 800, letterSpacing: "-0.3px" }}>📅 Seanslar</h2>
       <div style={{ ...cardStyle, padding: 14 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Tarih Seçin</h3>
@@ -557,7 +557,7 @@ function SessionsPage({ user, sessions, users, onBook, onCancel, onDelete, isAdm
             const isSelected = d.date === selectedDate;
             return (
               <div key={d.date} onClick={() => { setSelectedDate(d.date); setShowBooking(true); }}
-                style={{ minWidth: 52, padding: "8px 4px", borderRadius: 12, textAlign: "center", cursor: "pointer", background: isSelected ? COLORS.primary : d.isWeekend ? "#F1F5F9" : "#fff", color: isSelected ? "#fff" : COLORS.text, border: `2px solid ${isSelected ? COLORS.primary : "transparent"}`, transition: "all 0.2s" }}>
+                style={{ minWidth: 52, padding: "10px 4px", borderRadius: 14, textAlign: "center", cursor: "pointer", background: isSelected ? "linear-gradient(135deg, #0891B2, #0EA5E9)" : d.isWeekend ? "#F8FAFC" : "#fff", color: isSelected ? "#fff" : COLORS.text, border: isSelected ? "none" : "1.5px solid #E2E8F0", transition: "all 0.2s", boxShadow: isSelected ? "0 4px 12px rgba(8,145,178,0.3)" : "none" }}>
                 <div style={{ fontSize: 11, fontWeight: 500, opacity: 0.7 }}>{d.dayName}</div>
                 <div style={{ fontSize: 18, fontWeight: 800, margin: "2px 0" }}>{d.day}</div>
                 {hasSession && <div style={{ width: 6, height: 6, borderRadius: "50%", background: isSelected ? "#fff" : COLORS.secondary, margin: "0 auto" }} />}
@@ -576,7 +576,7 @@ function SessionsPage({ user, sessions, users, onBook, onCancel, onDelete, isAdm
               const selected = selectedTime === t;
               return (
                 <button key={t} disabled={booked} onClick={() => setSelectedTime(t)}
-                  style={{ padding: "10px", borderRadius: 10, border: `2px solid ${selected ? COLORS.primary : COLORS.border}`, background: selected ? `${COLORS.primary}10` : booked ? "#F1F5F9" : "#fff", color: booked ? "#CBD5E1" : selected ? COLORS.primary : COLORS.text, fontWeight: 600, fontSize: 14, cursor: booked ? "not-allowed" : "pointer", textDecoration: booked ? "line-through" : "none" }}>
+                  style={{ padding: "12px", borderRadius: 12, border: selected ? "2px solid #0891B2" : "1.5px solid #E2E8F0", background: selected ? "linear-gradient(135deg, #0891B210, #0EA5E910)" : booked ? "#F8FAFC" : "#fff", color: booked ? "#CBD5E1" : selected ? COLORS.primary : COLORS.text, fontWeight: 700, fontSize: 15, cursor: booked ? "not-allowed" : "pointer", textDecoration: booked ? "line-through" : "none", transition: "all 0.2s", boxShadow: selected ? "0 2px 8px rgba(8,145,178,0.15)" : "none" }}>
                   {t}
                 </button>
               );
@@ -605,7 +605,7 @@ function SessionsPage({ user, sessions, users, onBook, onCancel, onDelete, isAdm
                 <div style={{ fontSize: 12, color: COLORS.textLight }}>{s.duration} dakika</div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" as const }}>
-                <span style={{ background: `${statusColors[s.status]}15`, color: statusColors[s.status], borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>{statusLabels[s.status]}</span>
+                <span style={{ background: `${statusColors[s.status]}15`, color: statusColors[s.status], borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.2px" }}>{statusLabels[s.status]}</span>
                 {s.status === "upcoming" && (() => {
                   const matchingEvent = calendarEvents.find((ev: any) => {
                     const evDate = ev.start?.dateTime ? new Date(ev.start.dateTime).toISOString().split("T")[0] : "";
@@ -640,7 +640,7 @@ function SessionsPage({ user, sessions, users, onBook, onCancel, onDelete, isAdm
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <h3 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>📆 Google Takvim</h3>
           {calendarConnected ? (
-            <span style={{ background: "#10B98115", color: "#10B981", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>✅ Bağlı</span>
+            <span style={{ background: "#10B98115", color: "#10B981", borderRadius: 10, padding: "4px 10px", fontSize: 11, fontWeight: 700, letterSpacing: "0.2px" }}>✅ Bağlı</span>
           ) : (
             <button onClick={() => window.location.href = "/api/auth/google"} style={{ background: "#fff", color: "#0891B2", border: "2px solid #0891B2", borderRadius: 10, padding: "6px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>🔗 Bağla</button>
           )}
