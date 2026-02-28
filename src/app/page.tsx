@@ -164,15 +164,15 @@ function LoginScreen({ onLogin, onGoRegister }: { onLogin: (email: string, passw
           <label style={{ fontSize: 13, fontWeight: 600, color: COLORS.textLight, marginBottom: 6, display: "block" }}>Şifre</label>
           <input style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: `1.5px solid ${COLORS.border}`, fontSize: 15, outline: "none", boxSizing: "border-box" }} type="password" value={password} onChange={e => { setPassword(e.target.value); setError(""); }} placeholder="••••••••" onKeyDown={e => e.key === "Enter" && handleLogin()} />
         </div>
-        <button onClick={handleLogin} disabled={loading} style={{ background: "#0E7490", color: "#fff", border: "none", borderRadius: 14, padding: "13px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", width: "100%", boxShadow: "none", opacity: loading ? 0.7 : 1, transition: "all 0.2s", letterSpacing: "0.3px" }}>
+        <button onClick={handleLogin} disabled={loading} style={{ background: "linear-gradient(135deg, #0E7490, #155E75)", color: "#fff", border: "none", borderRadius: 14, padding: "13px 24px", fontSize: 15, fontWeight: 700, cursor: "pointer", width: "100%", boxShadow: "none", opacity: loading ? 0.7 : 1, transition: "all 0.2s", letterSpacing: "0.3px" }}>
           {loading ? "Giriş yapılıyor..." : "Platforma Gir"}
         </button>
         <div style={{ textAlign: "center", marginTop: 16 }}>
           <span style={{ color: COLORS.textLight, fontSize: 14 }}>Hesabınız yok mu? </span>
           <span style={{ color: COLORS.primary, fontWeight: 700, cursor: "pointer", fontSize: 14 }} onClick={onGoRegister}>Kayıt Ol</span>
         </div>
-        <div style={{ textAlign: "center", marginTop: 12, paddingTop: 12, borderTop: "1px solid #E2E8F0" }}>
-          <span style={{ fontSize: 11, color: "#64748B" }}>🏅 ICF Akredite Koç · Güvenli Platform</span>
+        <div style={{ textAlign: "center", marginTop: 12, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.15)" }}>
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>🏅 ICF Akredite Koç · Güvenli Platform</span>
         </div>
         <div style={{ textAlign: "center", marginTop: 8 }}>
           <span onClick={async () => {
@@ -274,38 +274,6 @@ function RegisterScreen({ onRegister, onGoLogin }: { onRegister: (form: any) => 
           <span style={{ color: COLORS.secondary, fontWeight: 700, cursor: "pointer", fontSize: 14 }} onClick={onGoLogin}>Giriş Yap</span>
         </div>
       </div>
-      {/* Programlar */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📋 Programlar</h3>
-        <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
-          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
-            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Student</div>
-            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Öğrenciler ve yeni mezunlar için. SWOT Analizi, Değerler Çalışması, Yaşam Çemberi, CV &amp; LinkedIn, Hedefler &amp; Vizyon. 4 veya 6 seanslık programlar.</div>
-          </div>
-          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
-            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Professional</div>
-            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Profesyoneller için. Kariyer SWOT Analizi, Değerler Analizi, Vizyon &amp; Misyon, Gelişim Planı Takibi, CV &amp; LinkedIn Danışmanlığı. 4 veya 6 seanslık programlar.</div>
-          </div>
-        </div>
-        <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#FFF7ED", border: "1px solid #FED7AA" }}>
-          <div style={{ fontSize: 12, color: "#92400E", fontWeight: 600 }}>🎁 Ücretsiz Tanışma: 40 dk Kimya Seansı ile hedef ve beklenti analizi</div>
-        </div>
-      </div>
-
-      {/* Hakkımda */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>👤 Koçunuz Hakkında</h3>
-        <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
-          <p style={{ margin: "0 0 10px" }}>Serkan Mursallı, ICF akredite profesyonel koçluk altyapısını; veri odaklı analiz, stratejik planlama, liderlik ve değişim yönetimi uzmanlığıyla birleştirmektedir.</p>
-          <p style={{ margin: "0 0 10px" }}>Süreç geliştirme, operasyonel mükemmellik ve dijital dönüşüm alanlarında Constantia Flexibles, Jotun, Vestel ve Arçelik gibi markalarda edindiği 8+ yıllık deneyimle profesyonellerin ihtiyaçlarına doğru dokunan çözümler sunmaktadır.</p>
-          <p style={{ margin: 0, fontWeight: 600, color: COLORS.primary }}>Odak: Potansiyeli somut sonuçlara dönüştürmek, karar alma mekanizmalarını güçlendirmek.</p>
-        </div>
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, background: "#0E7490", color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>LinkedIn Profili</a>
-          <a href="mailto:serkanmursalli@gmail.com" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, border: "1.5px solid #0E7490", color: "#0E7490", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>E-posta Gönder</a>
-        </div>
-      </div>
-
     </div>
   );
 }
@@ -461,7 +429,7 @@ function ClientHome({ user, sessions, users, onRate }: { user: UserType; session
             )}
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 800, fontSize: 17 }}>{admin.name}</div>
-              <div style={{ fontSize: 12, opacity: 0.9, marginTop: 2 }}>🏅 ICF Akredite Profesyonel Koç</div>
+              <div style={{ fontSize: 12, opacity: 0.9 }}>🏅 ICF Akredite Profesyonel Koç</div>
               <div style={{ fontSize: 12, opacity: 0.7, marginTop: 2 }}>{admin.city}</div>
               <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                 <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", textDecoration: "none", fontSize: 16 }}>💼</a>
@@ -500,6 +468,38 @@ function ClientHome({ user, sessions, users, onRate }: { user: UserType; session
           </div>
         ))}
       </div>
+      {/* Programlar */}
+      <div style={cardStyle}>
+        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📋 Programlar</h3>
+        <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
+          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Student</div>
+            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Öğrenciler ve yeni mezunlar için. SWOT Analizi, Değerler Çalışması, Yaşam Çemberi, CV & LinkedIn, Hedefler & Vizyon. 4 veya 6 seanslık programlar.</div>
+          </div>
+          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Professional</div>
+            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Profesyoneller için. Kariyer SWOT Analizi, Değerler Analizi, Vizyon & Misyon, Gelişim Planı Takibi, CV & LinkedIn Danışmanlığı. 4 veya 6 seanslık programlar.</div>
+          </div>
+        </div>
+        <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#FFF7ED", border: "1px solid #FED7AA" }}>
+          <div style={{ fontSize: 12, color: "#92400E", fontWeight: 600 }}>🎁 Ücretsiz Tanışma: 40 dk Kimya Seansı ile hedef ve beklenti analizi</div>
+        </div>
+      </div>
+
+      {/* Hakkımda */}
+      <div style={cardStyle}>
+        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>👤 Koçunuz Hakkında</h3>
+        <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
+          <p style={{ margin: "0 0 10px" }}>Serkan Mursallı, ICF akredite profesyonel koçluk altyapısını; veri odaklı analiz, stratejik planlama, liderlik ve değişim yönetimi uzmanlığıyla birleştirmektedir.</p>
+          <p style={{ margin: "0 0 10px" }}>Süreç geliştirme, operasyonel mükemmellik ve dijital dönüşüm alanlarında Constantia Flexibles, Jotun, Vestel ve Arçelik gibi markalarda edindiği 8+ yıllık deneyimle profesyonellerin ihtiyaçlarına doğru dokunan çözümler sunmaktadır.</p>
+          <p style={{ margin: 0, fontWeight: 600, color: COLORS.primary }}>Odak: Potansiyeli somut sonuçlara dönüştürmek, karar alma mekanizmalarını güçlendirmek.</p>
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+          <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, background: "#0E7490", color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>LinkedIn Profili</a>
+          <a href="mailto:serkanmursalli@gmail.com" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, border: "1.5px solid #0E7490", color: "#0E7490", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>E-posta Gönder</a>
+        </div>
+      </div>
+
     </div>
   );
 }
