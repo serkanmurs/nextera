@@ -95,24 +95,6 @@ interface NotificationType {
   created_at: string;
 }
 
-interface TaskType {
-  id: string;
-  client_id: string;
-  title: string;
-  is_done: boolean;
-  due_date: string | null;
-  created_at: string;
-}
-
-interface JournalType {
-  id: string;
-  client_id: string;
-  session_id: string | null;
-  note: string;
-  category: string;
-  created_at: string;
-}
-
 // ==================== HELPER ====================
 function getInitials(name: string) {
   return name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
@@ -411,7 +393,7 @@ function AdminDashboard({ users, sessions }: { users: UserType[]; sessions: Sess
 }
 
 // ==================== CLIENT HOME ====================
-function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, onToggleTask, onAddJournal }: { user: UserType; sessions: SessionType[]; users: UserType[]; onRate: (id: string) => void; tasks: TaskType[]; journal: JournalType[]; onAddTask: (title: string) => void; onToggleTask: (id: string, done: boolean) => void; onAddJournal: (note: string, cat: string) => void }) {
+function ClientHome({ user, sessions, users, onRate }: { user: UserType; sessions: SessionType[]; users: UserType[]; onRate: (id: string) => void }) {
   const mySessions = sessions.filter(s => s.client_id === user.id);
   const completed = mySessions.filter(s => s.status === "completed");
   const upcoming = mySessions.filter(s => s.status === "upcoming");
@@ -447,7 +429,7 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
             )}
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 800, fontSize: 17 }}>{admin.name}</div>
-              <div style={{ fontSize: 12, opacity: 0.9 }}>🏅 ICF Akredite Profesyonel Danışman</div>
+              <div style={{ fontSize: 12, opacity: 0.9 }}>🏅 ICF Akredite Profesyonel Koç</div>
               <div style={{ fontSize: 12, opacity: 0.7, marginTop: 2 }}>{admin.city}</div>
               <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
                 <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", textDecoration: "none", fontSize: 16 }}>💼</a>
@@ -486,94 +468,6 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
           </div>
         ))}
       </div>
-      {/* Haftalik Odak */}
-      <div style={{ ...cardStyle, background: "#F0F9FF", border: "1px solid #BAE6FD" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.primary, marginBottom: 8 }}>Bu Haftaki Odagin</div>
-        <div style={{ fontSize: 14, color: COLORS.text, lineHeight: 1.5, fontStyle: "italic" }}>Her seans bir farkindalik, her farkindalik bir adim. Bugun hangi adimi atacaksin?</div>
-      </div>
-
-      {/* Ilerleme + Milestone */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-        <div style={cardStyle}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textLight, marginBottom: 8 }}>Ilerleme</div>
-          <div style={{ fontSize: 24, fontWeight: 800, color: COLORS.primary }}>{completed.length}/{mySessions.length}</div>
-          <div style={{ fontSize: 11, color: COLORS.textLight, marginBottom: 8 }}>Seans Tamamlandi</div>
-          <div style={{ height: 6, borderRadius: 3, background: "#E2E8F0", overflow: "hidden" }}>
-            <div style={{ height: "100%", borderRadius: 3, background: COLORS.primary, width: mySessions.length > 0 ? String(Math.round(completed.length / mySessions.length * 100)) + "%" : "0%", transition: "width 0.5s" }} />
-          </div>
-          <div style={{ fontSize: 11, color: COLORS.textLight, marginTop: 4 }}>{mySessions.length > 0 ? Math.round(completed.length / mySessions.length * 100) : 0}% tamamlandi</div>
-        </div>
-        <div style={cardStyle}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.textLight, marginBottom: 8 }}>Sonraki Hedef</div>
-          {upcoming.length > 0 ? (<><div style={{ fontSize: 14, fontWeight: 700, color: COLORS.text }}>{formatDate(upcoming[0].date)}</div><div style={{ fontSize: 12, color: COLORS.textLight, marginTop: 2 }}>{upcoming[0].time} - Online Seans</div><div style={{ marginTop: 8, fontSize: 11, color: COLORS.primary, fontWeight: 600 }}>Hazirlan ve Odaklan</div></>) : (<div style={{ fontSize: 13, color: COLORS.textLight }}>Yeni seans planla</div>)}
-        </div>
-      </div>
-
-      {/* Siradaki Seans */}
-      {upcoming.length > 0 && (
-        <div style={{ ...cardStyle, background: "linear-gradient(135deg, #0E7490, #155E75)", color: "#fff", border: "none" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-            <div>
-              <div style={{ fontSize: 12, opacity: 0.8, fontWeight: 600, marginBottom: 4 }}>Siradaki Seansin</div>
-              <div style={{ fontSize: 20, fontWeight: 800 }}>{formatDate(upcoming[0].date)}</div>
-              <div style={{ fontSize: 14, opacity: 0.9, marginTop: 2 }}>{upcoming[0].time} - {upcoming[0].duration} dk</div>
-            </div>
-            <div style={{ background: "rgba(255,255,255,0.15)", borderRadius: 12, padding: "8px 12px", fontSize: 13, fontWeight: 700 }}>
-              {(() => { const now = new Date(); const s = new Date(upcoming[0].date + "T" + upcoming[0].time + ":00+03:00"); const diff = Math.round((s.getTime() - now.getTime()) / 86400000); return diff === 0 ? "Bugun" : diff === 1 ? "Yarin" : diff + " gun"; })()}
-            </div>
-          </div>
-          <div style={{ marginTop: 12, padding: "10px", borderRadius: 10, background: "rgba(255,255,255,0.15)", textAlign: "center" as const, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Seansa Katil</div>
-        </div>
-      )}
-
-      {/* Aksiyon Planım */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>✅ Adımlarım</h3>
-        {tasks.length === 0 ? (
-          <p style={{ fontSize: 13, color: COLORS.textLight, textAlign: "center" as const, padding: 10 }}>Henüz bir adım eklenmedi. İlk hedefinizi belirleyin!</p>
-        ) : tasks.map(t => (
-          <div key={t.id} onClick={() => onToggleTask(t.id, !t.is_done)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", borderBottom: "1px solid #F1F5F9", cursor: "pointer" }}>
-            <div style={{ width: 22, height: 22, borderRadius: 6, border: t.is_done ? "none" : "2px solid #CBD5E1", background: t.is_done ? COLORS.primary : "transparent", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              {t.is_done && <span style={{ color: "#fff", fontSize: 12, fontWeight: 800 }}>✓</span>}
-            </div>
-            <span style={{ fontSize: 14, color: t.is_done ? COLORS.textLight : COLORS.text, textDecoration: t.is_done ? "line-through" : "none", flex: 1 }}>{t.title}</span>
-          </div>
-        ))}
-        <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
-          <input id="newTaskInput" placeholder="Yeni adım ekle..." style={{ flex: 1, padding: "10px 14px", borderRadius: 10, border: "1.5px solid #E2E8F0", fontSize: 13, outline: "none" }} onKeyDown={(e: any) => { if (e.key === "Enter" && e.target.value.trim()) { onAddTask(e.target.value.trim()); e.target.value = ""; } }} />
-          <button onClick={() => { const inp = document.getElementById("newTaskInput") as HTMLInputElement; if (inp?.value.trim()) { onAddTask(inp.value.trim()); inp.value = ""; } }} style={{ padding: "10px 16px", borderRadius: 10, background: COLORS.primary, color: "#fff", border: "none", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Ekle</button>
-        </div>
-      </div>
-
-      {/* Gelişim Günlüğüm */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📓 Gelişim Günlüğüm</h3>
-        <p style={{ margin: "0 0 12px", fontSize: 12, color: COLORS.textLight }}>Seans sonrası farkındalıklarını, kararlarını ve aksiyonlarını not et.</p>
-        <textarea id="journalInput" placeholder="Bugünün farkındalığını not al..." style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: "1.5px solid #E2E8F0", fontSize: 13, outline: "none", boxSizing: "border-box" as const, minHeight: 70, resize: "vertical" as const, fontFamily: "inherit" }} />
-        <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" as const }}>
-          {["farkindalik", "karar", "aksiyon"].map(cat => (
-            <button key={cat} onClick={() => { const inp = document.getElementById("journalInput") as HTMLTextAreaElement; if (inp?.value.trim()) { onAddJournal(inp.value.trim(), cat); inp.value = ""; } }} style={{ padding: "6px 12px", borderRadius: 8, border: "1.5px solid #E2E8F0", background: cat === "farkindalik" ? "#FEF3C7" : cat === "karar" ? "#DBEAFE" : "#D1FAE5", fontSize: 11, fontWeight: 600, cursor: "pointer", color: cat === "farkindalik" ? "#92400E" : cat === "karar" ? "#1E40AF" : "#065F46" }}>
-              {cat === "farkindalik" ? "💡 Farkındalık" : cat === "karar" ? "🎯 Karar" : "🚀 Aksiyon"}
-            </button>
-          ))}
-        </div>
-        {journal.length > 0 && (
-          <div style={{ marginTop: 14, borderTop: "1px solid #E2E8F0", paddingTop: 12 }}>
-            {journal.slice(0, 5).map(j => (
-              <div key={j.id} style={{ padding: "8px 0", borderBottom: "1px solid #F8FAFC" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: j.category === "farkindalik" ? "#D97706" : j.category === "karar" ? "#1E40AF" : "#059669" }}>
-                    {j.category === "farkindalik" ? "💡 Farkındalık" : j.category === "karar" ? "🎯 Karar" : "🚀 Aksiyon"}
-                  </span>
-                  <span style={{ fontSize: 10, color: COLORS.textLight }}>{new Date(j.created_at).toLocaleDateString("tr-TR")}</span>
-                </div>
-                <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.5 }}>{j.note}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
       {/* Programlar */}
       <div style={cardStyle}>
         <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📋 Programlar</h3>
@@ -594,7 +488,7 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
 
       {/* Hakkımda */}
       <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>👤 Danışmanınız Hakkında</h3>
+        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>👤 Koçunuz Hakkında</h3>
         <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
           <p style={{ margin: "0 0 10px" }}>Serkan Mursallı, ICF akredite profesyonel koçluk altyapısını; veri odaklı analiz, stratejik planlama, liderlik ve değişim yönetimi uzmanlığıyla birleştirmektedir.</p>
           <p style={{ margin: "0 0 10px" }}>Süreç geliştirme, operasyonel mükemmellik ve dijital dönüşüm alanlarında Constantia Flexibles, Jotun, Vestel ve Arçelik gibi markalarda edindiği 8+ yıllık deneyimle profesyonellerin ihtiyaçlarına doğru dokunan çözümler sunmaktadır.</p>
@@ -1093,8 +987,6 @@ export default function NextERAApp() {
   const [sessions, setSessions] = useState<SessionType[]>([]);
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const [tasks, setTasks] = useState<TaskType[]>([]);
-  const [journal, setJournal] = useState<JournalType[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [ratingSession, setRatingSession] = useState<string | null>(null);
   const [ratingValue, setRatingValue] = useState(0);
@@ -1128,20 +1020,16 @@ export default function NextERAApp() {
   // ---- Fetch data from Supabase ----
   const fetchData = useCallback(async (userId: string) => {
     try {
-      const [usersRes, sessionsRes, messagesRes, notifsRes, tasksRes, journalRes] = await Promise.all([
+      const [usersRes, sessionsRes, messagesRes, notifsRes] = await Promise.all([
         supabase.from("users").select("*"),
         supabase.from("sessions").select("*"),
         supabase.from("messages").select("*").or(`sender_id.eq.${userId},receiver_id.eq.${userId}`).order("created_at", { ascending: true }),
         supabase.from("notifications").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
-        supabase.from("tasks").select("*"),
-        supabase.from("journal").select("*").order("created_at", { ascending: false }),
       ]);
       if (usersRes.data) setUsers(usersRes.data);
       if (sessionsRes.data) setSessions(sessionsRes.data);
       if (messagesRes.data) setMessages(messagesRes.data);
       if (notifsRes.data) setNotifications(notifsRes.data);
-      if (tasksRes.data) setTasks(tasksRes.data);
-      if (journalRes.data) setJournal(journalRes.data);
     } catch (err) {
       console.error("Data fetch error:", err);
     }
@@ -1387,7 +1275,7 @@ export default function NextERAApp() {
 
       {/* Page Content */}
       <div style={{ paddingBottom: 80, minHeight: "calc(100vh - 130px)" }}>
-        {page === "home" && (isAdmin ? <AdminDashboard users={users} sessions={sessions} /> : currentUser && <ClientHome user={currentUser} sessions={sessions} users={users} onRate={(id) => { setRatingSession(id); setRatingValue(0); setReviewText(""); }} tasks={tasks.filter(t => t.client_id === currentUser.id)} journal={journal.filter(j => j.client_id === currentUser.id)} onAddTask={async (title) => { const { data, error } = await supabase.from("tasks").insert({ client_id: currentUser.id, title }).select().single(); if (data) setTasks(prev => [...prev, data]); }} onToggleTask={async (id, done) => { await supabase.from("tasks").update({ is_done: done }).eq("id", id); setTasks(prev => prev.map(t => t.id === id ? { ...t, is_done: done } : t)); }} onAddJournal={async (note, cat) => { const { data } = await supabase.from("journal").insert({ client_id: currentUser.id, note, category: cat }).select().single(); if (data) setJournal(prev => [data, ...prev]); }} />)}
+        {page === "home" && (isAdmin ? <AdminDashboard users={users} sessions={sessions} /> : currentUser && <ClientHome user={currentUser} sessions={sessions} users={users} onRate={(id) => { setRatingSession(id); setRatingValue(0); setReviewText(""); }} />)}
         {page === "sessions" && currentUser && <SessionsPage user={currentUser} sessions={sessions} users={users} onBook={handleBookSession} onCancel={handleCancelSession} onDelete={handleDeleteSession} isAdmin={isAdmin} />}
         {page === "messages" && currentUser && <MessagesPage user={currentUser} messages={messages} users={users} onSend={handleSendMessage} isAdmin={isAdmin} />}
         {page === "profile" && currentUser && <ProfilePage user={currentUser} sessions={sessions} onLogout={handleLogout} onUpdate={handleUpdateProfile} />}
