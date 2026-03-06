@@ -545,68 +545,36 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
         </div>
       </div>
 
-      {/* Gelişim Günlüğüm */}
       <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📓 Gelişim Günlüğüm</h3>
-        <p style={{ margin: "0 0 12px", fontSize: 12, color: COLORS.textLight }}>Seans sonrası farkındalıklarını, kararlarını ve aksiyonlarını not et.</p>
-        <textarea id="journalInput" placeholder="Bugünün farkındalığını not al..." style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: "1.5px solid #E2E8F0", fontSize: 13, outline: "none", boxSizing: "border-box" as const, minHeight: 70, resize: "vertical" as const, fontFamily: "inherit" }} />
-        <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" as const }}>
+        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>Gelisim Gunlugum</h3>
+        <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+          <textarea id="journalInput" placeholder="Bugunku farkindaligini, kararini veya aksiyonunu yaz..." style={{ flex: 1, padding: "12px 14px", borderRadius: 10, border: "1.5px solid #E2E8F0", fontSize: 13, outline: "none", boxSizing: "border-box" as const, minHeight: 70, resize: "vertical" as const, fontFamily: "inherit" }} />
+        </div>
+        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" as const }}>
           {["farkindalik", "karar", "aksiyon"].map(cat => (
-            <button key={cat} onClick={() => { const inp = document.getElementById("journalInput") as HTMLTextAreaElement; if (inp?.value.trim()) { onAddJournal(inp.value.trim(), cat); inp.value = ""; } }} style={{ padding: "6px 12px", borderRadius: 8, border: "1.5px solid #E2E8F0", background: cat === "farkindalik" ? "#FEF3C7" : cat === "karar" ? "#DBEAFE" : "#D1FAE5", fontSize: 11, fontWeight: 600, cursor: "pointer", color: cat === "farkindalik" ? "#92400E" : cat === "karar" ? "#1E40AF" : "#065F46" }}>
-              {cat === "farkindalik" ? "💡 Farkındalık" : cat === "karar" ? "🎯 Karar" : "🚀 Aksiyon"}
+            <button key={cat} onClick={() => { const inp = document.getElementById("journalInput") as HTMLTextAreaElement; if (inp?.value.trim()) { onAddJournal(inp.value.trim(), cat); inp.value = ""; } }} style={{ padding: "8px 14px", borderRadius: 8, border: "1.5px solid #E2E8F0", background: cat === "farkindalik" ? "#FEF3C7" : cat === "karar" ? "#DBEAFE" : "#D1FAE5", fontSize: 12, fontWeight: 600, cursor: "pointer", color: cat === "farkindalik" ? "#92400E" : cat === "karar" ? "#1E40AF" : "#065F46" }}>
+              {cat === "farkindalik" ? "Farkindalik Kaydet" : cat === "karar" ? "Karar Kaydet" : "Aksiyon Kaydet"}
             </button>
           ))}
         </div>
         {journal.length > 0 && (
-          <div style={{ marginTop: 14, borderTop: "1px solid #E2E8F0", paddingTop: 12 }}>
-            {journal.slice(0, 5).map(j => (
-              <div key={j.id} style={{ padding: "8px 0", borderBottom: "1px solid #F8FAFC" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: j.category === "farkindalik" ? "#D97706" : j.category === "karar" ? "#1E40AF" : "#059669" }}>
-                    {j.category === "farkindalik" ? "💡 Farkındalık" : j.category === "karar" ? "🎯 Karar" : "🚀 Aksiyon"}
+          <div style={{ marginTop: 16 }}>
+            {journal.map(j => (
+              <div key={j.id} style={{ padding: "14px", marginBottom: 8, borderRadius: 12, background: "#FAFAFA", border: "1px solid #F1F5F9" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: j.category === "farkindalik" ? "#D97706" : j.category === "karar" ? "#1E40AF" : "#059669", background: j.category === "farkindalik" ? "#FEF3C7" : j.category === "karar" ? "#DBEAFE" : "#D1FAE5", padding: "3px 8px", borderRadius: 6 }}>
+                    {j.category === "farkindalik" ? "Farkindalik" : j.category === "karar" ? "Karar" : "Aksiyon"}
                   </span>
-                  <span style={{ fontSize: 10, color: COLORS.textLight }}>{new Date(j.created_at).toLocaleDateString("tr-TR")}</span>
+                  <span style={{ fontSize: 11, color: COLORS.textLight }}>{new Date(j.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} - {new Date(j.created_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}</span>
                 </div>
-                <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.5 }}>{j.note}</div>
+                <div style={{ fontSize: 14, color: COLORS.text, lineHeight: 1.6 }}>{j.note}</div>
               </div>
             ))}
           </div>
         )}
       </div>
 
-      {/* Programlar */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>📋 Programlar</h3>
-        <div style={{ display: "flex", flexDirection: "column" as const, gap: 12 }}>
-          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
-            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Student</div>
-            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Öğrenciler ve yeni mezunlar için. SWOT Analizi, Değerler Çalışması, Yaşam Çemberi, CV & LinkedIn, Hedefler & Vizyon. 4 veya 6 seanslık programlar.</div>
-          </div>
-          <div style={{ padding: 16, borderRadius: 12, border: "1px solid #E2E8F0", background: "#FAFAFA" }}>
-            <div style={{ fontWeight: 700, fontSize: 14, color: COLORS.primary, marginBottom: 4 }}>NextERA Professional</div>
-            <div style={{ fontSize: 12, color: COLORS.textLight, lineHeight: 1.5 }}>Profesyoneller için. Kariyer SWOT Analizi, Değerler Analizi, Vizyon & Misyon, Gelişim Planı Takibi, CV & LinkedIn Danışmanlığı. 4 veya 6 seanslık programlar.</div>
-          </div>
-        </div>
-        <div style={{ marginTop: 12, padding: "10px 14px", borderRadius: 10, background: "#FFF7ED", border: "1px solid #FED7AA" }}>
-          <div style={{ fontSize: 12, color: "#92400E", fontWeight: 600 }}>🎁 Ücretsiz Tanışma: 40 dk Kimya Seansı ile hedef ve beklenti analizi</div>
-        </div>
       </div>
-
-      {/* Hakkımda */}
-      <div style={cardStyle}>
-        <h3 style={{ margin: "0 0 14px", fontSize: 16, fontWeight: 800, color: COLORS.text }}>👤 Danışmanınız Hakkında</h3>
-        <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
-          <p style={{ margin: "0 0 10px" }}>Serkan Mursallı, ICF akredite profesyonel koçluk altyapısını; veri odaklı analiz, stratejik planlama, liderlik ve değişim yönetimi uzmanlığıyla birleştirmektedir.</p>
-          <p style={{ margin: "0 0 10px" }}>Süreç geliştirme, operasyonel mükemmellik ve dijital dönüşüm alanlarında Constantia Flexibles, Jotun, Vestel ve Arçelik gibi markalarda edindiği 8+ yıllık deneyimle profesyonellerin ihtiyaçlarına doğru dokunan çözümler sunmaktadır.</p>
-          <p style={{ margin: 0, fontWeight: 600, color: COLORS.primary }}>Odak: Potansiyeli somut sonuçlara dönüştürmek, karar alma mekanizmalarını güçlendirmek.</p>
-        </div>
-        <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
-          <a href="https://www.linkedin.com/services/page/2800ba317abbbbb440/" target="_blank" rel="noopener noreferrer" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, background: "#0E7490", color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>LinkedIn Profili</a>
-          <a href="mailto:serkanmursalli@gmail.com" style={{ flex: 1, textAlign: "center" as const, padding: "10px", borderRadius: 10, border: "1.5px solid #0E7490", color: "#0E7490", textDecoration: "none", fontSize: 13, fontWeight: 700 }}>E-posta Gönder</a>
-        </div>
-      </div>
-
-    </div>
   );
 }
 
