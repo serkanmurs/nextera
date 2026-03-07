@@ -199,7 +199,7 @@ const PD: Record<string,{t:string;c:string;bg:string;e:string;s:string[];w:strin
     w:["Kararsız olabilir","Motivasyon eksikliği","Değişime dirençli","Pasif kalabilir"],
     summary:"Karşındaki insan için kolay kolay bulunmayan hazine gibi bir özelliğin var: Dinlemek. İyi bir dinleyicisin ve bu insanları çok rahatlatıyor. Duygu durumun genellikle tutarlı; olaylar karşısında beklenmedik tepkiler vermiyorsun. Sakin, dengeli ve uyumlu yapınla insanlar arasındaki sorunlarda farklılıkları uzlaştırmaya çalışıyorsun.\n\nGelişim alanlarına baktığımızda, dikkatleri üzerine toplamamak için geride durma eğiliminde olabiliyorsun. Kararsızlık ve motivasyon eksikliği yaşayabiliyor, değişime direnç gösterebiliyorsun. Bir çare düşünüyorsun ama sonra bunun iyi sonuç vermeyeceğini düşünüyorsun. Hep bir isteksizlik hali olabiliyor. Çocuktan büyüğe herkesin istediği gibi davranmasına göz yumabiliyorsun. Kendi sesini daha fazla duyur ve harekete geçmekten çekinme."},
 };
-function PersonalityTestScreen({onClose,onSave,initialResults}:{onClose:()=>void;onSave:(r:any)=>void;initialResults?:any}) {
+function PersonalityTestScreen({onClose,onSave,initialResults,userName}:{onClose:()=>void;onSave:(r:any)=>void;initialResults?:any;userName?:string}) {
   const [step,setStep]=useState(0);
   const [ans,setAns]=useState<Record<number,number>>(initialResults?.answers ? Object.fromEntries(Object.entries(initialResults.answers).map(([k,v])=>[Number(k),Number(v)])) : {});
   const [done,setDone]=useState(!!initialResults);
@@ -268,61 +268,41 @@ function PersonalityTestScreen({onClose,onSave,initialResults}:{onClose:()=>void
         </div>
 
         <div style={{fontSize:11,color:"#94A3B8",textAlign:"center",marginTop:16}}>Kaynak: Florence Littauer - Kişiliğinizi Tanıyın</div>
-        <button onClick={async()=>{
-          try{
-            const {default:jsPDF}=await import("jspdf");
-            const pdf=new jsPDF("p","mm","a4");
-            const w=pdf.internal.pageSize.getWidth();
-            const m=20;
-            let y=20;
-            
-            pdf.setFontSize(24);pdf.setTextColor(14,116,144);pdf.text("NextERA",m,y);
-            pdf.setFontSize(10);pdf.setTextColor(100,116,139);pdf.text("Kisilik Analiz Raporu",m,y+8);
-            pdf.text(new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"}),w-m-40,y+8);
-            pdf.setDrawColor(14,116,144);pdf.setLineWidth(0.5);pdf.line(m,y+12,w-m,y+12);
-            y+=24;
-            
-            pdf.setFontSize(16);pdf.setTextColor(15,23,42);pdf.text("Baskin Kisilik Tipin:",m,y);y+=8;
-            const dInfo=PD[dom];
-            const cRGB=dom==="P"?[217,119,6]:dom==="K"?[220,38,38]:dom==="M"?[30,64,175]:[5,150,105];
-            pdf.setFontSize(18);pdf.setTextColor(cRGB[0],cRGB[1],cRGB[2]);pdf.text(dInfo.t,m,y);y+=12;
-            
-            const types2=[{k:"P" as const,n:"Populer Optimist"},{k:"K" as const,n:"Guclu Kolerik"},{k:"M" as const,n:"Mukemmeliyetci Melankolik"},{k:"B" as const,n:"Bariscil Sogukkanli"}];
-            pdf.setFontSize(11);
-            types2.forEach(tp=>{
-              const v=res[tp.k];const pct=Math.round(v/tot*100);
-              pdf.setTextColor(100,116,139);pdf.text(tp.n+":",m,y);
-              pdf.setTextColor(15,23,42);pdf.text(v+" puan (%"+pct+")",m+75,y);
-              pdf.setFillColor(226,232,240);pdf.rect(m,y+2,w-2*m,4,"F");
-              const bc=tp.k==="P"?[217,119,6]:tp.k==="K"?[220,38,38]:tp.k==="M"?[30,64,175]:[5,150,105];
-              pdf.setFillColor(bc[0],bc[1],bc[2]);pdf.rect(m,y+2,(w-2*m)*pct/100,4,"F");
-              y+=12;
-            });
-            y+=6;
-            
-            pdf.setFontSize(13);pdf.setTextColor(cRGB[0],cRGB[1],cRGB[2]);pdf.text("Guclu Yonlerin",m,y);y+=7;
-            pdf.setFontSize(10);pdf.setTextColor(15,23,42);
-            dInfo.s.forEach((s: string)=>{pdf.text("  - "+s,m,y);y+=5;});
-            y+=4;
-            
-            pdf.setFontSize(13);pdf.setTextColor(cRGB[0],cRGB[1],cRGB[2]);pdf.text("Gelisim Alanlarin",m,y);y+=7;
-            pdf.setFontSize(10);pdf.setTextColor(15,23,42);
-            dInfo.w.forEach((w2: string)=>{pdf.text("  - "+w2,m,y);y+=5;});
-            y+=8;
-            
-            if(y>240){pdf.addPage();y=20;}
-            pdf.setFontSize(13);pdf.setTextColor(14,116,144);pdf.text("Kisilik Profilin Hakkinda",m,y);y+=8;
-            pdf.setFontSize(10);pdf.setTextColor(15,23,42);
-            const st=dInfo.summary.replace(/\n\n/g," ");
-            const sL=pdf.splitTextToSize(st,w-2*m);
-            sL.forEach((ln: string)=>{if(y>275){pdf.addPage();y=20;}pdf.text(ln,m,y);y+=5;});
-            y+=8;
-            
-            pdf.setFontSize(8);pdf.setTextColor(148,163,184);
-            pdf.text("Kaynak: Florence Littauer - Kisiliginizi Taniyin | NextERA Danismanlik Platformu",m,y);
-            
-            pdf.save("NextERA_Kisilik_Raporu.pdf");
-          }catch(e){console.error("PDF:",e);alert("PDF olusturulamadi");}
+        <button onClick={()=>{
+          const dI=PD[dom];
+          const pP2=Math.round(res.P/tot*100),pK2=Math.round(res.K/tot*100),pM2=Math.round(res.M/tot*100),pB2=Math.round(res.B/tot*100);
+          const bars=[{n:"Pop\u00fcler Optimist",c:"#D97706",v:res.P,p:pP2},{n:"G\u00fc\u00e7l\u00fc Kolerik",c:"#DC2626",v:res.K,p:pK2},{n:"M\u00fckemmeliyetçi Melankolik",c:"#1E40AF",v:res.M,p:pM2},{n:"Bar\u0131\u015f\u00e7\u0131l So\u011fukkanlı",c:"#059669",v:res.B,p:pB2}];
+          const bH=bars.map(function(b){return "<div style=\"margin-bottom:12px\"><div style=\"display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px\"><span style=\"font-weight:700;color:"+b.c+"\">"+b.n+"</span><span style=\"color:"+b.c+"\">"+b.v+"/"+tot+" (%"+b.p+")</span></div><div style=\"height:8px;border-radius:4px;background:#E2E8F0;overflow:hidden\"><div style=\"height:100%;border-radius:4px;background:"+b.c+";width:"+b.p+"%\"></div></div></div>";}).join("");
+          const sH=dI.s.map(function(x: string){return "<div style=\"font-size:13px;padding:3px 0\">\u2705 "+x+"</div>";}).join("");
+          const wH=dI.w.map(function(x: string){return "<div style=\"font-size:13px;padding:3px 0\">\ud83d\udca1 "+x+"</div>";}).join("");
+          const smH=dI.summary.split("\n\n").map(function(x: string){return "<p style=\"margin:0 0 10px;font-size:13px;line-height:1.7\">"+x+"</p>";}).join("");
+          const dt=new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"});
+          var h="<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>NextERA Rapor</title>";
+          h+="<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">";
+          h+="<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;padding:40px;color:#0F172A;max-width:800px;margin:0 auto}@media print{body{padding:20px}@page{margin:15mm}.np{display:none!important}}</style></head><body>";
+          h+="<div style=\"display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0E7490;padding-bottom:16px;margin-bottom:24px\">";
+          h+="<div><div style=\"font-size:28px;font-weight:800;color:#0E7490\">Next<span style=\"color:#F97316\">ERA</span></div><div style=\"font-size:12px;color:#64748B\">Ki\u015filik Analiz Raporu</div></div>";
+          h+="<div style=\"text-align:right\"><div style=\"font-size:14px;font-weight:700\">"+(userName||"")+"</div><div style=\"font-size:12px;color:#64748B\">"+dt+"</div></div></div>";
+          h+="<div style=\"text-align:center;margin:24px 0\"><div style=\"font-size:48px\">"+dI.e+"</div>";
+          h+="<div style=\"font-size:22px;font-weight:800;color:"+dI.c+";margin-top:8px\">"+dI.t+"</div>";
+          h+="<div style=\"font-size:13px;color:#64748B;margin-top:4px\">Bask\u0131n ki\u015filik tipin</div></div>";
+          h+="<div style=\"display:flex;justify-content:center;margin:20px 0\">";
+          h+="<div style=\"width:180px;height:180px;border-radius:50%;background:conic-gradient(#D97706 0% "+pP2+"%, #DC2626 "+pP2+"% "+(pP2+pK2)+"%, #1E40AF "+(pP2+pK2)+"% "+(pP2+pK2+pM2)+"%, #059669 "+(pP2+pK2+pM2)+"% 100%);box-shadow:0 2px 8px rgba(0,0,0,0.1)\"></div></div>";
+          h+="<div style=\"display:flex;justify-content:center;gap:16px;margin:16px 0;flex-wrap:wrap\">";
+          h+="<span style=\"font-size:12px;font-weight:700;color:#D97706\">Optimist %"+pP2+"</span>";
+          h+="<span style=\"font-size:12px;font-weight:700;color:#DC2626\">Kolerik %"+pK2+"</span>";
+          h+="<span style=\"font-size:12px;font-weight:700;color:#1E40AF\">Melankolik %"+pM2+"</span>";
+          h+="<span style=\"font-size:12px;font-weight:700;color:#059669\">So\u011fukkanlı %"+pB2+"</span></div>";
+          h+="<div style=\"margin:20px 0\">"+bH+"</div>";
+          h+="<div style=\"margin:20px 0;padding:20px;border-radius:12px;background:"+dI.bg+"\">";
+          h+="<h3 style=\"font-size:16px;font-weight:800;color:"+dI.c+";margin-bottom:10px\">G\u00fc\u00e7l\u00fc Y\u00f6nlerin</h3>"+sH;
+          h+="<h3 style=\"font-size:16px;font-weight:800;color:"+dI.c+";margin-top:14px;margin-bottom:10px\">Geli\u015fim Alanlar\u0131n</h3>"+wH+"</div>";
+          h+="<div style=\"margin:20px 0;padding:20px;border-radius:12px;background:#F8FAFC;border:1px solid #E2E8F0\">";
+          h+="<h3 style=\"font-size:16px;font-weight:800;margin-bottom:10px\">Ki\u015filik Profilin Hakk\u0131nda</h3>"+smH+"</div>";
+          h+="<div style=\"margin-top:24px;padding-top:16px;border-top:1px solid #E2E8F0;font-size:10px;color:#94A3B8;text-align:center\">Kaynak: Florence Littauer | NextERA</div>";
+          h+="<div class=\"np\" style=\"margin-top:20px;text-align:center\"><button onclick=\"window.print()\" style=\"padding:12px 32px;border-radius:10px;background:#0E7490;color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer\">Yazd\u0131r / PDF Kaydet</button></div>";
+          h+="</body></html>";
+          var pw=window.open("","_blank");if(pw){pw.document.write(h);pw.document.close();}
         }} style={{width:"100%",padding:"14px",borderRadius:12,background:"#155E75",color:"#fff",border:"none",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:12}}>📄 PDF Rapor İndir</button>
         <button onClick={()=>{setDone(false);setAns({});setStep(0);setRes({P:0,K:0,M:0,B:0});}} style={{width:"100%",padding:"14px",borderRadius:12,background:"#F97316",color:"#fff",border:"none",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:12}}>🔄 Testi Tekrarla</button>
         <button onClick={onClose} style={{width:"100%",padding:"14px",borderRadius:12,border:"1.5px solid #E2E8F0",background:"#fff",color:"#64748B",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:8}}>Kapat</button>
@@ -761,7 +741,7 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
 
       {/* Kisilik Testi */}
       {showPersonalityTest ? (
-        <PersonalityTestScreen onClose={() => setShowPersonalityTest(false)} onSave={(r: any) => { onSaveTest(r); setShowPersonalityTest(false); }} initialResults={personalityTest} />
+        <PersonalityTestScreen onClose={() => setShowPersonalityTest(false)} userName={user.name} onSave={(r: any) => { onSaveTest(r); setShowPersonalityTest(false); }} initialResults={personalityTest} />
       ) : (
         <div onClick={() => setShowPersonalityTest(true)} style={{ ...cardStyle, cursor: "pointer", background: personalityTest ? "#F0FDF4" : "linear-gradient(135deg, #FEF3C7, #FFF7ED)", border: personalityTest ? "1px solid #BBF7D0" : "1px solid #FED7AA" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
