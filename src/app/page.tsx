@@ -198,21 +198,7 @@ const PD: Record<string,{t:string;c:string;bg:string;e:string;s:string[];w:strin
     s:["Sakin ve dengeli","İyi dinleyici","Uyumlu ve barışçıl","Sabırlı ve hoşgörülü","Güvenilir ve tutarlı"],
     w:["Kararsız olabilir","Motivasyon eksikliği","Değişime dirençli","Pasif kalabilir"],
     summary:"Karşındaki insan için kolay kolay bulunmayan hazine gibi bir özelliğin var: Dinlemek. İyi bir dinleyicisin ve bu insanları çok rahatlatıyor. Duygu durumun genellikle tutarlı; olaylar karşısında beklenmedik tepkiler vermiyorsun. Sakin, dengeli ve uyumlu yapınla insanlar arasındaki sorunlarda farklılıkları uzlaştırmaya çalışıyorsun.\n\nGelişim alanlarına baktığımızda, dikkatleri üzerine toplamamak için geride durma eğiliminde olabiliyorsun. Kararsızlık ve motivasyon eksikliği yaşayabiliyor, değişime direnç gösterebiliyorsun. Bir çare düşünüyorsun ama sonra bunun iyi sonuç vermeyeceğini düşünüyorsun. Hep bir isteksizlik hali olabiliyor. Çocuktan büyüğe herkesin istediği gibi davranmasına göz yumabiliyorsun. Kendi sesini daha fazla duyur ve harekete geçmekten çekinme."},
-};> = {
-  P:{t:"Popüler Optimist",c:"#D97706",bg:"#FEF3C7",e:"🌟",
-    s:["Eğlenceli ve enerjik","Kolay arkadaşlık kurar","İyimser ve coşkulu","İlham verici","Yaratıcı fikirler üretir"],
-    w:["Odaklanma süresi kısa olabilir","Dağınık olabilir","Detayları atlayabilir","Abartıya kaçabilir"]},
-  K:{t:"Güçlü Kolerik",c:"#DC2626",bg:"#FEE2E2",e:"🔥",
-    s:["Doğal lider","Kararlı ve hedef odaklı","Hızlı karar verir","Organize ve üretken","Cesur ve risk alır"],
-    w:["Sabırsız olabilir","Otoriter davranabilir","Başkalarının duygularını göz ardı edebilir","İnatçı olabilir"]},
-  M:{t:"Mükemmeliyetçi Melankolik",c:"#1E40AF",bg:"#DBEAFE",e:"💎",
-    s:["Detaycı ve analitik","Planlı ve düzenli","Derin düşünür","Yaratıcı ve yetenekli","Sadık ve özverili"],
-    w:["Aşırı eleştirici olabilir","Karamsarlığa yatkın","Karar vermekte zorlanabilir","Aşırı hassas olabilir"]},
-  B:{t:"Barışçıl Soğukkanlı",c:"#059669",bg:"#D1FAE5",e:"🌿",
-    s:["Sakin ve dengeli","İyi dinleyici","Uyumlu ve barışçıl","Sabırlı ve hoşgörülü","Güvenilir ve tutarlı"],
-    w:["Kararsız olabilir","Motivasyon eksikliği","Değişime dirençli","Pasif kalabilir"]},
 };
-
 function PersonalityTestScreen({onClose,onSave,initialResults}:{onClose:()=>void;onSave:(r:any)=>void;initialResults?:any}) {
   const [step,setStep]=useState(0);
   const [ans,setAns]=useState<Record<number,number>>(initialResults?.answers ? Object.fromEntries(Object.entries(initialResults.answers).map(([k,v])=>[Number(k),Number(v)])) : {});
