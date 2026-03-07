@@ -566,7 +566,7 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
                   </span>
                   <span style={{ fontSize: 11, color: COLORS.textLight }}>{new Date(j.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} - {new Date(j.created_at).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}</span>
                 </div>
-                <div style={{ fontSize: 14, color: COLORS.text, lineHeight: 1.6 }}>{j.note}</div>
+                <div style={{ fontSize: 14, color: COLORS.text, lineHeight: 1.6, wordBreak: "break-word" as const, overflowWrap: "break-word" as const }}>{j.note}</div>
                 <div style={{ display: "flex", gap: 8, marginTop: 6, justifyContent: "flex-end" }}>
                   <svg onClick={() => { const newNote = prompt("Notu düzenle:", j.note); if (newNote && newNote.trim()) onEditJournal(j.id, newNote.trim()); }} width="14" height="14" fill="none" stroke="#94A3B8" strokeWidth="2" viewBox="0 0 24 24" style={{ cursor: "pointer" }}><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   <svg onClick={() => { if (confirm("Bu notu silmek istediğinize emin misiniz?")) onDeleteJournal(j.id); }} width="14" height="14" fill="none" stroke="#94A3B8" strokeWidth="2" viewBox="0 0 24 24" style={{ cursor: "pointer" }}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
