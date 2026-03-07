@@ -180,77 +180,25 @@ const PQ = [
 ];
 
 
-// Soru bazli yorumlar - her sorunun 4 secenegi icin yorum
-const QCOMMENTS: string[][] = [
-  // 1: Maceraperest/Uyumlu/Canli/Analitik
-  ["Cesursun. Yeni bir girişimde bulunmaktan ve bir konuda ustalaşmaktan çekinmiyorsun. Sakin hayat sürmek isteyen arkadaşlarını bazen yorabilirsin.",
-   "Başkalarının da ihtiyaçları olabileceği konusunda empati gösteriyorsun ve başkalarının ihtiyaçlarına saygı duyuyorsun.",
-   "Canlı bir kişiliğe sahipsin. Enerji seviyen yüksek. İnsanlarla bir arada olmak senin için bir fırsat.",
-   "Planlama senin için çok önemli. Sana göre her şey bir program dahilinde ilerlemeli. Belirsizlikler seni rahatsız eder."],
-  // 2: Israrci/Sakaci/Ikna edici/Bariscil
-  ["Oldukça etkili bir duruşun var. Başkalarının karşı gelmekte tereddüt edeceği kadar etkili ve hakim bir karaktere sahipsin.",
-   "Esprilisin. Eğlenceli bir insansın. Her ortamda aynı dozda espri yaparsan kantarın topuzunu kaçırabilirsin.",
-   "Karizmatik bir kişiliğe sahipsin. Başkalarını harekete geçirmeyi ve konuya katmayı başarabiliyorsun.",
-   "Duygu durumunun genellikle tutarlı olduğunu söyleyebiliriz. Olaylar karşısında beklenmedik tepkiler vermiyorsun."],
-  // 3: Uysal/Ozverili/Sosyal/Azimli
-  ["Öyle bir duruşun var ki insanlar senden bir zarar gelmeyeceğini hissedebiliyorlar.",
-   "Sistemli bir şekilde işlerini düzenlemeyi ve bunun için metodlar kullanmayı seviyorsun.",
-   "İnsanlarla bir arada olmak senin için fırsat. Şirinliğini, esprilerini göstermek için bir fırsat.",
-   "Pek korkmuyorsun. Risk almaya hazırsın. Şans cesurlardan yanadır."],
-  // 4: Dusunceli/Kontrollu/Rekabetci/Inandirici
-  ["Duygularını ve coşkunu ifade etmekte kendini sınırlıyorsun. İhtiyatı elden bırakma ama çok da elinde sıkma.",
-   "Sensörlerin hep açık. Başkalarının düşüncelerine oldukça önem veriyorsun. Aşırı duyarlılık bazen yorar.",
-   "Tartışmalar senin beslenme kaynakların. En büyük zevkin neden haklı olduğunu anlatmak.",
-   "Espri zekan sayesinde ince espriler yapabiliyorsun. Bazıları bunu alaycılık olarak algılayabilir."],
-  // 5: Hayat veren/Saygili/Ihtiyatli/Becerili
-  ["İnsanlara ilham veriyorsun. Enerjin bulaşıcı ve çevreni motive ediyorsun.",
-   "İnsanlar arasındaki sorunlarda farklılıkları uzlaştırmaya çalışıyorsun.",
-   "Detaycı ve dikkatlisin. Her adımını düşünerek atıyorsun.",
-   "Organize ve üretkensin. Elinden çıkan işler kaliteli olur."],
-  // 6: Memnun/Duyarli/Guvenen/Hayat Dolu
-  ["Karşındaki insan için kolay bulunmayan bir özelliğin var: Dinlemek. İyi bir dinleyicisin.",
-   "Farklı düşünen insanlara karşı oldukça hoşgörülüsün. Başkalarının düşüncelerine saygılısın.",
-   "Hep çalış hep başar. Ama ara sıra dinlenmek lazım. Baltayı bilemek için durmak gerekir.",
-   "Mutfaktaki bir şef gibisin. Herkes seni izlesin, dinlesin ve yaptıklarına değer versin."],
-  // 7-20 Guclu yonler devam
-  ["Detaycı ve planlısın. Her şeyin bir düzeni olmasını istersin.","Sabırlısın ve insanlara zaman tanırsın.","Olumlu bakış açın insanları etkiler ve motive eder.","Doğal bir yönlendiricisin. İnsanlar seni takip eder."],
-  ["Kararlısın ve kararlarının arkasında durursun.","Anı yaşamayı bilirsin. Hayattan keyif alırsın.","Her şeyin bir programı vardır senin için. Düzen ve disiplin önemlidir.","Mütevazısın ve dikkatleri üzerine çekmekten kaçınırsın."],
-  ["Düzenli ve sistematiksin. Çevren her zaman derli topludur.","Nazik ve kibar yaklaşımın insanları rahatlatır.","Açık sözlüsün. Düşündüğünü söylemekten çekinmezsin.","İyimsersin. Her durumda olumlu tarafı görürsün."],
-  ["Dostça davranışların insanları kendine çeker.","Sadık ve vefalısın. Verdiğin sözü tutarsın.","Eğlenceli kişiliğin ortamlara renk katar.","Etkili bir iletişim tarzın var. Sözlerin ağırlık taşır."],
-  ["Cesaret senin en belirgin özelliklerinden. Korkmadan adım atarsın.","Hoş ve sevimli tavırlarınla insanları etkilersin.","Diplomatik yaklaşımın çatışmaları çözmeye yardımcı olur.","Ayrıntılara önem verirsin. Hiçbir detayı kaçırmazsın."],
-  ["Neşeli kişiliğin çevrene pozitif enerji yayar.","Tutarlısın. Söylediklerin ve yaptıkların uyumludur.","Kültürlü ve bilgilisin. Entelektüel bir bakış açın var.","Güvenilir birisin. İnsanlar sana güvenebilir."],
-  ["İdealistsin. Yüksek standartların ve hayallerin var.","Bağımsızsın. Kendi başına karar verir ve uygularsın.","Kendi halinde sakin bir yapın var. Huzuru seversin.","Başkalarına ilham verirsin. Esin kaynağısın."],
-  ["Sıcakkanlısın. İnsanlarla kolayca bağ kurarsın.","Kararlısın. Bir kez karar verdiğinde geri adım atmazsın.","İnce esprilerinle ortamı neşelendirirsin.","Derin düşünürsün. Yüzeysel kalmayı sevmezsin."],
-  ["Arabulucu rolü senin için doğaldır. Barışı sağlarsın.","Sanatsal ve estetik yönün güçlüdür.","Harekete geçiren enerjin var. İnsanları motive edersin.","Kolay kaynaşır, herkesle iletişim kurarsın."],
-  ["İnce düşüncelisin. Başkalarının duygularını önemsersin.","Azimlisin. Başladığın işi bitirirsin.","Konuşkan ve sosyalsin. İletişim kurman kolaydır.","Hoşgörülüsün. İnsanların hatalarını affedersin."],
-  ["İyi bir dinleyicisin. İnsanlar sana açılır.","Vefalısın. Dostluklarına değer verirsin.","Liderlik vasfın doğuştan gelir.","Enerjik ve hareketlisin. Durağanlıktan hoşlanmazsın."],
-  ["Kanaatkar ve mütevazısın.","Yönetici ruhlusun. Kontrolü elde tutmayı seversin.","Organizasyon yeteneğin güçlüdür.","Şirin ve sempatik tavırlarınla sevilen birisin."],
-  ["Mükemmeliyetçisin. En iyisini istersin.","Tatlı ve uyumlu birisin. İnsanlarla iyi geçinirsin.","Üretken ve verimlisin. Sonuç odaklı çalışırsın.","Popülersin. İnsanlar seninle olmaktan hoşlanır."],
-  ["Hareketli ve dinamiksin. Yerinde duramayan bir yapın var.","Gözü peksin. Risklerden korkmazsın.","Terbiyeli ve saygılı davranışlarınla takdir edilirsin.","Dengeli ve ölçülüsün. Aşırılıklardan kaçınırsın."],
-  // 21-40 Zayif yonler
-  ["Dikkatleri üzerine toplamamak için geride duruyorsun. Arkadaşların yeterince destek almadıklarını hissedebilirler.","Bir çare düşünüyorsun; sonra bunun iyi sonuç vermeyeceğini düşünüyorsun. Heyecanın eksik.","Yaşamın derinliklerine inmiyorsun. Basit ve çocukça bir bakış açın var.","Başkalarına neyi nasıl yapması gerektiğini söylemekten kaçınmıyorsun. Otoritersin."],
-  ["Sebat etmiyorsun. Bir işi sonuna kadar götüremiyorsun. Çabuk vazgeçiyorsun.","Standartların o kadar yüksek ki seni tatmin etmek hayli güç.","Duygularını ifade etmekte zorlanıyorsun. Coşkusuz görünebilirsin.","Diyelim ki karşındaki kusurluydu ve kin besledin. Hiç hak etmediği halde bazı insanlara da kin besliyorsun."],
-  ["Hep bir ayak direme hali. Hep bir isteksizlik hali var.","Yerli yersiz pek çok konuda derin kaygılar ve endişeler yaşayıp huzursuz oluyorsun.","Tartışmalar senin beslenme kaynakların. Haklı olduğunu anlatmak en büyük zevkin.","Kendini tekrarlıyorsun. Aynı şeyleri söyleyip duruyorsun."],
-  ["Mükemmel için sürekli iyiden fedakarlık ediyorsun. Karar vermekten çekiniyorsun.","Çocuktan büyüğe herkesin istediği gibi davranmasına göz yumuyorsun.","Unutkansın. Önemli detayları gözden kaçırabiliyorsun.","Patavatsızlık yapabiliyorsun. Düşüncelerini kırıcı biçimde ifade edebiliyorsun."],
-  ["Geveze olabiliyorsun. Konuşmayı uzatıyorsun.","Sabırsızsın. Her şeyin hemen olmasını istiyorsun.","Güvensizsin. Kendine yeterince inanmıyorsun.","Kararsızsın. Seçim yapmakta zorlanıyorsun."],
-  ["Belki içinde bir şefkat kırıntısı var ama dışarı vuramıyorsun.","Bulaşmayan, mesafeli bir yapın var.","Ne yapacağın belirsiz. Tutarsız davranışlar sergileyebiliyorsun.","Şevkatsizsin. İnsanlara karşı soğuk durabiliyorsun."],
-  ["İnatçısın. Fikrini değiştirmek zordur.","Gelişigüzel davranıyorsun. Detaylara önem vermiyorsun.","Zor beğenirsin. Mükemmel olmayan hiçbir şey seni tatmin etmez.","Tereddütlüsün. Adım atmakta gecikiyorsun."],
-  ["Renksiz ve sönük durabiliyorsun. Enerji seviyen düşük görünüyor.","Kötümsersin. Olayların hep kötü tarafını görüyorsun.","Kibirli olabiliyorsun. Kendini başkalarından üstün görebiliyorsun.","Her şeye göz yumuyorsun. Senden hoşlanmayacaklarından endişe ediyorsun."],
-  ["Kolay sinirleniyorsun. Duygu kontrolün zayıf olabiliyor.","Amaçsızsın. Net bir hedefin yok gibi görünüyor.","İddiacısın. Haklı olduğundan bir an bile tereddüt etmiyorsun.","Yabancılaşmışsın. İnsanlardan uzaklaşma eğiliminde olabiliyorsun."],
-  ["Ahmakça davranabiliyorsun. Düşünmeden hareket ediyorsun.","Negatif davranan birisin. Olumsuz tepkilere odaklanıyorsun.","Küstahsın. İnsanlara emir vererek kontrolü sağlamaya çalışıyorsun.","Kayıtsızsın. Olan bitene aldırmıyorsun."],
-  ["Endişelisin. Sürekli kaygılanıyorsun.","Yalnızlığa sığınıyorsun. İnsanlardan uzaklaşıyorsun.","İş delisisin. Kendini sürekli çalışmak ve üretmek zorunda hissediyorsun.","Tanınmak istiyorsun. İlgi ve onay arayışındasın."],
-  ["Aşırı hassassın. Her şeyi kişisel algılayabiliyorsun.","Patavatsızlık yapabiliyorsun. Düşüncelerini kırıcı biçimde ifade edebiliyorsun.","Ürkeksin. Risk almaktan kaçınıyorsun.","Gevezesin. Konuşmayı bırakmak zor geliyor."],
-  ["Şüphecisin. İnsandan, olaylardan, her şeyden şüphe duyuyorsun.","Düzensizsin. İşlerini organize etmekte zorlanıyorsun.","Otoritersin. İnsanlara ne yapmaları gerektiğini söylemekten geri durmuyorsun.","Bunalımlısın. Zorlandığın zaman mırıldanmaktan kendini alıkoyamıyorsun."],
-  ["Tutarsızsın. Aykırı ve mantıksız davranışlar sergileyebiliyorsun.","İçe dönüksün. Duygularını paylaşmakta zorlanıyorsun.","Hoşgörüsüzsün. Başkalarının hatalarını affetmekte zorlanıyorsun.","Umursamazsın. Olan bitene kayıtsız kalabiliyorsun."],
-  ["Dağınıksın. Eşyaların ve düşüncelerin karmakarışık olabiliyor.","Karamsarsın. Yargılayıcı ve olumsuz tepkilere odaklanan bir yapın var.","Zorlandığın zaman mırıldanmaktan kendini alıkoyamıyorsun.","İnsanları kullanabiliyorsun. Kendi çıkarın için başkalarından faydalanabiliyorsun."],
-  ["Çabuk düşünmüyor ve çabuk davranmıyorsun. Ağırkanlı olabiliyorsun.","Dik kafasın. Fikrini kolay kolay değiştirmezsin.","Hava atabiliyorsun. Kendini göstermek istiyorsun.","Şüphecisin. Her şeyi sorgulamadan kabul etmezsin."],
-  ["Yalnızlığı seviyorsun. İnsanlardan uzak kalmayı tercih ediyorsun.","Güdmeye çalışıyorsun. İnsanları kontrol etmek istiyorsun.","Tembelsin. Harekete geçmekte zorlanıyorsun.","Gürültücüsün. Dikkat çekmekten hoşlanıyorsun."],
-  ["Ağırkanlısın. Tepki vermekte yavaş kalabiliyorsun.","Şüphecisin. İnsanlara güvenmekte zorlanıyorsun.","Çabuk sinirleniyorsun. Sabrın kısa sürede tükenebiliyor.","Kafası dağınıksın. Odaklanmakta zorlanabiliyorsun."],
-  ["Huzursuzluğun dinmiyor. İç huzuru bulmakta zorlanıyorsun.","Acelecisin. Sabırsızlığın hatalara yol açabiliyor.","İntikamcısın. Kötülükleri unutmaz ve karşılık vermek istersin.","Gönülsüzsün. İsteksiz bir halde işlere yaklaşıyorsun."],
-  ["Her şeyde ödün verebiliyorsun. Kendi değerlerinden kolayca vazgeçebiliyorsun.","Tenkitçisin. Sürekli eleştiren ve olumsuz gören bir yapın var.","Kurnazlık yapabiliyorsun. Durumu kendi lehine çevirmeye çalışıyorsun.","Değişkensin. Ruh halin ve kararların sık sık değişebiliyor."],
-];
 
-const PD: Record<string,{t:string;c:string;bg:string;e:string;s:string[];w:string[]}> = {
+const PD: Record<string,{t:string;c:string;bg:string;e:string;s:string[];w:string[];summary:string}> = {
+  P:{t:"Popüler Optimist",c:"#D97706",bg:"#FEF3C7",e:"🌟",
+    s:["Eğlenceli ve enerjik","Kolay arkadaşlık kurar","İyimser ve coşkulu","İlham verici","Yaratıcı fikirler üretir"],
+    w:["Odaklanma süresi kısa olabilir","Dağınık olabilir","Detayları atlayabilir","Abartıya kaçabilir"],
+    summary:"Canlı bir kişiliğe sahipsin. Enerji seviyen yüksek ve insanlarla bir arada olmak senin için büyük bir motivasyon kaynağı. Esprili ve eğlenceli yapınla ortamlara renk katıyor, doğal karizmanla insanları kendine çekiyorsun. Yaratıcı fikirlerin ve iyimser bakış açın sayesinde çevrene ilham veriyorsun. Kolay arkadaşlık kuruyor, sıcakkanlı tavırlarınla insanları rahatlatıyorsun.\n\nAncak dikkat etmen gereken bazı noktalar var. Odaklanma süren kısa olabiliyor ve detayları atlama eğiliminde olabiliyorsun. Dağınıklık ve abartıya kaçma gibi konularda kendini geliştirmen faydalı olacaktır. Her ortamda aynı dozda espri yaparsan kantarın topuzunu kaçırabilirsin. Unutma ki enerjini doğru yönettiğinde etrafındaki herkes için gerçek bir ilham kaynağı olabilirsin."},
+  K:{t:"Güçlü Kolerik",c:"#DC2626",bg:"#FEE2E2",e:"🔥",
+    s:["Doğal lider","Kararlı ve hedef odaklı","Hızlı karar verir","Organize ve üretken","Cesur ve risk alır"],
+    w:["Sabırsız olabilir","Otoriter davranabilir","Başkalarının duygularını göz ardı edebilir","İnatçı olabilir"],
+    summary:"Oldukça etkili ve etkileyici bir duruşun var. Başkalarının karşı gelmekte tereddüt edeceği kadar güçlü ve hakim bir karaktere sahipsin. Doğal bir lidersin; kararlı, hedef odaklı ve organize çalışırsın. Cesursun, risk almaktan korkmuyorsun. Hızlı karar verir ve sonuç odaklı hareket edersin.\n\nGelişim alanlarına baktığımızda, sabırsızlık ve otoriter davranma eğilimin öne çıkıyor. Başkalarına neyi nasıl yapması gerektiğini söylemekten kaçınmıyorsun. Standartların o kadar yüksek ki seni tatmin etmek hayli güç olabiliyor. Başkalarının duygularını göz ardı etmemeye özen göster. İnatçılığını azaltıp empatiyi artırdığında, liderlik kapasiten çok daha etkili hale gelecektir."},
+  M:{t:"Mükemmeliyetçi Melankolik",c:"#1E40AF",bg:"#DBEAFE",e:"💎",
+    s:["Detaycı ve analitik","Planlı ve düzenli","Derin düşünür","Yaratıcı ve yetenekli","Sadık ve özverili"],
+    w:["Aşırı eleştirici olabilir","Karamsarlığa yatkın","Karar vermekte zorlanabilir","Aşırı hassas olabilir"],
+    summary:"Planlama senin için çok önemli. Her şeyin bir program dahilinde ilerlemesini istersin ve belirsizlikler seni rahatsız eder. Sistemli, düzenli ve detaycı bir yapın var. Derin düşünür, analitik yaklaşırsın. Yaratıcılığın ve yeteneklerin sayesinde elinden çıkan işler kaliteli olur. Sadık ve özverili birisin.\n\nAncak mükemmel için sürekli iyiden fedakarlık ediyorsun. Karar vermekten çekinebiliyor, pek çok fırsatı kaçırabiliyorsun. Duygularını ve coşkunu ifade etmekte kendini sınırlıyorsun. Aşırı duyarlılık ve eleştirici bakış açın bazen seni ve çevreni yorabiliyor. Yerli yersiz endişeler yaşayıp huzursuz olabiliyorsun. İhtiyatı elden bırakma ama çok da elinde sıkma. Kendine biraz daha güven ve mükemmeli beklemek yerine harekete geç."},
+  B:{t:"Barışçıl Soğukkanlı",c:"#059669",bg:"#D1FAE5",e:"🌿",
+    s:["Sakin ve dengeli","İyi dinleyici","Uyumlu ve barışçıl","Sabırlı ve hoşgörülü","Güvenilir ve tutarlı"],
+    w:["Kararsız olabilir","Motivasyon eksikliği","Değişime dirençli","Pasif kalabilir"],
+    summary:"Karşındaki insan için kolay kolay bulunmayan hazine gibi bir özelliğin var: Dinlemek. İyi bir dinleyicisin ve bu insanları çok rahatlatıyor. Duygu durumun genellikle tutarlı; olaylar karşısında beklenmedik tepkiler vermiyorsun. Sakin, dengeli ve uyumlu yapınla insanlar arasındaki sorunlarda farklılıkları uzlaştırmaya çalışıyorsun.\n\nGelişim alanlarına baktığımızda, dikkatleri üzerine toplamamak için geride durma eğiliminde olabiliyorsun. Kararsızlık ve motivasyon eksikliği yaşayabiliyor, değişime direnç gösterebiliyorsun. Bir çare düşünüyorsun ama sonra bunun iyi sonuç vermeyeceğini düşünüyorsun. Hep bir isteksizlik hali olabiliyor. Çocuktan büyüğe herkesin istediği gibi davranmasına göz yumabiliyorsun. Kendi sesini daha fazla duyur ve harekete geçmekten çekinme."},
+};> = {
   P:{t:"Popüler Optimist",c:"#D97706",bg:"#FEF3C7",e:"🌟",
     s:["Eğlenceli ve enerjik","Kolay arkadaşlık kurar","İyimser ve coşkulu","İlham verici","Yaratıcı fikirler üretir"],
     w:["Odaklanma süresi kısa olabilir","Dağınık olabilir","Detayları atlayabilir","Abartıya kaçabilir"]},
@@ -323,21 +271,14 @@ function PersonalityTestScreen({onClose,onSave,initialResults}:{onClose:()=>void
           {PD[dom].w.map((w,i)=>(<div key={i} style={{fontSize:13,color:"#0F172A",padding:"3px 0"}}>💡 {w}</div>))}
         </div>
         
-        {/* Kisisel Yorumlar */}
+        {/* Genel Yorum */}
         <div style={{marginTop:20}}>
-          <h3 style={{margin:"0 0 14px",fontSize:18,fontWeight:800,color:"#0F172A"}}>Kişisel Yorumların</h3>
-          <div style={{fontSize:13,color:"#64748B",marginBottom:12}}>Seçimlerine göre sana özel değerlendirme:</div>
-          {Object.entries(ans).sort((a,b)=>Number(a[0])-Number(b[0])).map(([qi,oi])=>{
-            const qIdx=Number(qi);
-            const comment=QCOMMENTS[qIdx]?.[oi];
-            if(!comment)return null;
-            return(
-              <div key={qi} style={{padding:"12px 14px",marginBottom:8,borderRadius:10,background:qIdx<20?"#F8FAFC":"#FFF7ED",borderLeft:qIdx<20?"3px solid #0E7490":"3px solid #F97316"}}>
-                <div style={{fontSize:11,color:"#94A3B8",marginBottom:4}}>Soru {qIdx+1} - {PQ[qIdx].o[oi]}</div>
-                <div style={{fontSize:13,color:"#0F172A",lineHeight:1.6}}>{comment}</div>
-              </div>
-            );
-          })}
+          <h3 style={{margin:"0 0 14px",fontSize:18,fontWeight:800,color:"#0F172A"}}>Kişilik Profilin Hakkında</h3>
+          <div style={{padding:"16px",borderRadius:12,background:PD[dom].bg,border:"1px solid "+PD[dom].c+"20"}}>
+            {PD[dom].summary.split("\n\n").map((p: string,i: number)=>(
+              <p key={i} style={{margin:i===0?"0 0 12px 0":"12px 0 0 0",fontSize:14,color:"#0F172A",lineHeight:1.7}}>{p}</p>
+            ))}
+          </div>
         </div>
 
         <div style={{fontSize:11,color:"#94A3B8",textAlign:"center",marginTop:16}}>Kaynak: Florence Littauer - Kişiliğinizi Tanıyın</div>
