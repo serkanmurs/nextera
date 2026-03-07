@@ -196,11 +196,12 @@ const PD: Record<string,{t:string;c:string;bg:string;e:string;s:string[];w:strin
     w:["Kararsız olabilir","Motivasyon eksikliği","Değişime dirençli","Pasif kalabilir"]},
 };
 
-function PersonalityTestScreen({onClose,onSave}:{onClose:()=>void;onSave:(r:any)=>void}) {
+function PersonalityTestScreen({onClose,onSave,initialResults}:{onClose:()=>void;onSave:(r:any)=>void;initialResults?:any}) {
   const [step,setStep]=useState(0);
   const [ans,setAns]=useState<Record<number,number>>({});
-  const [done,setDone]=useState(false);
-  const [res,setRes]=useState({P:0,K:0,M:0,B:0});
+  const [done,setDone]=useState(!!initialResults);
+  const [res,setRes]=useState(initialResults ? {P:initialResults.popular_optimist||0,K:initialResults.strong_choleric||0,M:initialResults.perfectionist_melancholic||0,B:initialResults.peaceful_phlegmatic||0} : {P:0,K:0,M:0,B:0});
+  const [showRetake,setShowRetake]=useState(false);
 
   const calc=()=>{
     const sc={P:0,K:0,M:0,B:0};
@@ -268,61 +269,10 @@ function PersonalityTestScreen({onClose,onSave}:{onClose:()=>void;onSave:(r:any)
           el.style.display="none";
         }} style={{width:"100%",padding:"14px",borderRadius:12,background:"#155E75",color:"#fff",border:"none",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:12}}>📄 PDF Rapor İndir</button>
 
-        {/* Hidden PDF report div */}
-        <div id="pdfReport" style={{display:"none",position:"absolute",left:"-9999px",top:0,width:794,background:"#fff",padding:40,fontFamily:"Inter,sans-serif"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",borderBottom:"2px solid #0E7490",paddingBottom:16,marginBottom:24}}>
-            <div>
-              <div style={{fontSize:28,fontWeight:800,color:"#0E7490"}}>Next<span style={{color:"#F97316"}}>ERA</span></div>
-              <div style={{fontSize:12,color:"#64748B"}}>Kişilik Analiz Raporu</div>
-            </div>
-            <div style={{textAlign:"right"}}>
-              <div style={{fontSize:12,color:"#64748B"}}>{new Date().toLocaleDateString("tr-TR",{day:"numeric",month:"long",year:"numeric"})}</div>
-            </div>
-          </div>
+        
 
-          <div style={{marginBottom:24}}>
-            <div style={{fontSize:18,fontWeight:800,color:"#0F172A",marginBottom:4}}>Kişilik Profil Raporu</div>
-            <div style={{fontSize:13,color:"#64748B"}}>Florence Littauer Kişilik Analizi Sonuçları</div>
-          </div>
-
-          <div style={{textAlign:"center",marginBottom:24}}>
-            <div style={{fontSize:36,marginBottom:8}}>{PD[dom].e}</div>
-            <div style={{fontSize:22,fontWeight:800,color:PD[dom].c}}>Baskın Tip: {PD[dom].t}</div>
-          </div>
-
-          <div style={{display:"flex",justifyContent:"center",marginBottom:24}}>
-            <div style={{width:160,height:160,borderRadius:"50%",background:"conic-gradient(#D97706 0% "+String(pP)+"%, #DC2626 "+String(pP)+"% "+String(pP+pK)+"%, #1E40AF "+String(pP+pK)+"% "+String(pP+pK+pM)+"%, #059669 "+String(pP+pK+pM)+"% 100%)"}}/>
-          </div>
-
-          <div style={{display:"flex",justifyContent:"center",gap:16,marginBottom:24}}>
-            {(["P","K","M","B"] as const).map(k=>(<div key={k} style={{textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:PD[k].c}}>{Math.round(res[k]/tot*100)}%</div><div style={{fontSize:11,color:"#64748B"}}>{PD[k].t}</div></div>))}
-          </div>
-
-          {(["P","K","M","B"] as const).map(k=>{const d=PD[k];const pct=Math.round(res[k]/tot*100);return(
-            <div key={k} style={{marginBottom:12}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
-                <span style={{fontSize:12,fontWeight:700,color:d.c}}>{d.t}</span>
-                <span style={{fontSize:12,fontWeight:700,color:d.c}}>{res[k]} puan (%{pct})</span>
-              </div>
-              <div style={{height:10,borderRadius:5,background:"#E2E8F0",overflow:"hidden"}}>
-                <div style={{height:"100%",borderRadius:5,background:d.c,width:pct+"%"}}/>
-              </div>
-            </div>
-          );})}
-
-          <div style={{marginTop:24,padding:20,background:PD[dom].bg,borderRadius:12}}>
-            <div style={{fontSize:14,fontWeight:800,color:PD[dom].c,marginBottom:8}}>Güçlü Yönleriniz</div>
-            {PD[dom].s.map((s,i)=>(<div key={i} style={{fontSize:12,color:"#0F172A",padding:"2px 0"}}>• {s}</div>))}
-            <div style={{fontSize:14,fontWeight:800,color:PD[dom].c,marginTop:12,marginBottom:8}}>Gelişim Alanlarınız</div>
-            {PD[dom].w.map((w,i)=>(<div key={i} style={{fontSize:12,color:"#0F172A",padding:"2px 0"}}>• {w}</div>))}
-          </div>
-
-          <div style={{marginTop:24,paddingTop:16,borderTop:"1px solid #E2E8F0",fontSize:10,color:"#94A3B8",textAlign:"center"}}>
-            Kaynak: Florence Littauer - Kişiliğinizi Tanıyın (Personality Plus) | NextERA Danışmanlık Platformu
-          </div>
-        </div>
-
-        <button onClick={onClose} style={{width:"100%",padding:"14px",borderRadius:12,background:"#0E7490",color:"#fff",border:"none",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:8}}>Kapat</button>
+        <button onClick={()=>{setDone(false);setAns({});setStep(0);setRes({P:0,K:0,M:0,B:0});}} style={{width:"100%",padding:"14px",borderRadius:12,background:"#F97316",color:"#fff",border:"none",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:12}}>🔄 Testi Tekrarla</button>
+        <button onClick={onClose} style={{width:"100%",padding:"14px",borderRadius:12,border:"1.5px solid #E2E8F0",background:"#fff",color:"#64748B",fontSize:15,fontWeight:700,cursor:"pointer",marginTop:8}}>Kapat</button>
       </div>
     );
   }
@@ -758,7 +708,7 @@ function ClientHome({ user, sessions, users, onRate, tasks, journal, onAddTask, 
 
       {/* Kisilik Testi */}
       {showPersonalityTest ? (
-        <PersonalityTestScreen onClose={() => setShowPersonalityTest(false)} onSave={(r: any) => { onSaveTest(r); setShowPersonalityTest(false); }} />
+        <PersonalityTestScreen onClose={() => setShowPersonalityTest(false)} onSave={(r: any) => { onSaveTest(r); setShowPersonalityTest(false); }} initialResults={personalityTest} />
       ) : (
         <div onClick={() => setShowPersonalityTest(true)} style={{ ...cardStyle, cursor: "pointer", background: personalityTest ? "#F0FDF4" : "linear-gradient(135deg, #FEF3C7, #FFF7ED)", border: personalityTest ? "1px solid #BBF7D0" : "1px solid #FED7AA" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
