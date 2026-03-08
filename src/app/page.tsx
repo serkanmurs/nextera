@@ -281,7 +281,7 @@ function PersonalityTestScreen({onClose,onSave,initialResults,userName}:{onClose
           h+="<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap\" rel=\"stylesheet\">";
           h+="<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Inter,sans-serif;padding:40px;color:#0F172A;max-width:800px;margin:0 auto}@media print{body{padding:20px}@page{margin:15mm}.np{display:none!important}}</style></head><body>";
           h+="<div style=\"display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #0E7490;padding-bottom:16px;margin-bottom:24px\">";
-          h+="<div><div style=\"font-size:28px;font-weight:800;color:#0E7490\">Next<span style=\"color:#F97316\">ERA</span></div><div style=\"font-size:12px;color:#64748B\">Ki\u015filik Analiz Raporu</div></div>";
+          h+="<div style=\"display:flex;align-items:center;gap:12px\"><img src=\""+window.location.origin+"/logo.png\" style=\"width:48px;height:48px;border-radius:10px\" onerror=\"this.style.display='none'\"/><div><div style=\"font-size:28px;font-weight:800;color:#0E7490\">Next<span style=\"color:#F97316\">ERA</span></div><div style=\"font-size:12px;color:#64748B\">Ki\u015filik Analiz Raporu</div></div></div>";
           h+="<div style=\"text-align:right\"><div style=\"font-size:14px;font-weight:700\">"+(userName||"")+"</div><div style=\"font-size:12px;color:#64748B\">"+dt+"</div></div></div>";
           h+="<div style=\"text-align:center;margin:24px 0\"><div style=\"font-size:48px\">"+dI.e+"</div>";
           h+="<div style=\"font-size:22px;font-weight:800;color:"+dI.c+";margin-top:8px\">"+dI.t+"</div>";
